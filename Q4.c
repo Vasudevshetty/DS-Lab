@@ -67,7 +67,109 @@ int main()
 {
     struct linkedList l;
     initLinkedList(&l);
-    display(l);
+    struct linkedList copy;
+    int choice, data, position, key;
+
+    do
+    {
+        printf("\n\n");
+        printf("Menu.\n");
+        printf("1. Insert at head(front).\n");
+        printf("2. Insert at rear\n");
+        printf("3. Insert at specific position.\n");
+        printf("4. Delete from head(front).\n");
+        printf("5. Delete from rear(tail).\n");
+        printf("6. Delete from specific position/\n");
+        printf("7. Delete by key.\n");
+        printf("8. Search by key.\n");
+        printf("9. Create a ordered list.\n");
+        printf("10. Reverse the linked list.\n");
+        printf("11. Create a copy of the list.\n");
+        printf("12.Display the list.\n");
+        printf("13.Exit.\n");
+
+        printf("Enter the choice of operation : ");
+        scanf("%d", &choice);
+        printf("\n\n");
+
+        //added menu driven feature intend as you need.
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter data to insert at front: ");
+            scanf("%d", &data);
+            insertAtHead(&l, data);
+            display(l);
+            break;
+        case 2:
+            printf("Enter data to insert at rear: ");
+            scanf("%d", &data);
+            insertAtRear(&l, data);
+            display(l);
+            break;
+        case 3:
+            printf("Enter data to insert: ");
+            scanf("%d", &data);
+            printf("Enter position to insert at: ");
+            scanf("%d", &position);
+            insertAtPosition(&l, data, position);
+            display(l);
+            break;
+        case 4:
+            deleteAtHead(&l);
+            display(l);
+            break;
+        case 5:
+            deleteAtRear(&l);
+            display(l);
+            break;
+        case 6:
+            printf("Enter position to delete: ");
+            scanf("%d", &position);
+            deleteAtPosition(&l, position);
+            display(l);
+            break;
+        case 7:
+            printf("Enter key to delete: ");
+            scanf("%d", &key);
+            deleteByKey(&l, key);
+            display(l);
+            break;
+        case 8:
+            printf("Enter key to search: ");
+            scanf("%d", &key);
+            searchByKey(l, key);
+            display(l);
+            break;
+        case 9:
+            printf("Enter data to insert in the ordered list: ");
+            scanf("%d", &data);
+            createOrderedList(&l, data);
+            display(l);
+            break;
+        case 10:
+            reverse(&l);
+            printf("Reversed list is,\n");
+            display(l);
+            break;
+        case 11:
+            copy = copyList(l);
+            display(l);
+            printf("Copied list is,\n");
+            display(copy);
+            break;
+        case 12:
+            display(l);
+            break;
+        case 13:
+            printf("Exiting the program.\n");
+            break;
+        default:
+            printf("Invalid choice. Please try again.\n");
+            break;
+        }
+    } while (choice != 13);
     return 0;
 }
 
