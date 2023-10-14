@@ -629,8 +629,8 @@ void display(struct linkedList l)
     printf("Elements of the linked list are,\n");
     while (temp != NULL)
     {
-        printf("%d ", temp->data);
+        printf("%d->", temp->data);
         temp = temp->next;
     }
-    printf("\n");
+    printf("NULL\n");
 }
