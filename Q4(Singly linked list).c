@@ -34,6 +34,7 @@ int isEmpty(struct linkedList l)
     if both are true returns 1 the empty condtion and vice-versa*/
 }
 
+//function to check whether the function is sorted.
 int isSorted(struct linkedList l);
 
 // initalisation functions for node and linkedlist.
