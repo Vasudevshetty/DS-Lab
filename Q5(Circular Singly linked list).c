@@ -606,7 +606,7 @@ int isSorted(struct linkedListCircular l)
             return 0;
         }
         temp = temp->next;
-    } while (temp != l.head);
+    } while (temp != l.head && temp->next != NULL);
 
     // if it gets out of the loop it means the list is sorted in ascending order.
     return 1;
@@ -615,6 +615,47 @@ int isSorted(struct linkedListCircular l)
 // function to create a ordered list.
 void createOrderedList(struct linkedListCircular *l, int data)
 {
+    // check whether the list is valid.
+    if (!isEmpty(*l))
+    {
+        if (!isCircular(*l))
+        {
+            printf("List isn't circular. Insertion failed.\n");
+            return;
+        }
+    }
+    else
+    {
+        // if it is empty insert at head.
+        return insertAtHead(l, data);
+    }
+    
+    /*If wanted we can add the isSorted condition to maintain proper working of this function.*/
+
+    // suppose the data is the least, insert at head.
+    if (data < l->head->data)
+        return insertAtHead(l, data);
+
+    // suppose the data is not the least or the largest find its position.
+    int position = 0;
+    struct node *temp = l->head;
+
+    do
+    {
+        if (data > temp->data)
+        {
+            temp = temp->next;
+            position++;
+        }
+        else
+        {
+            // upon finding its position insert.
+            return insertAtPosition(l, data, position);
+        }
+    } while (temp != l->head);
+
+    // suppose if it is the highest. (only comes out of loop if it is highest). insert at rear.
+    return insertAtRear(l, data);
 }
 
 // function to reverse the linkedlist.
@@ -652,10 +693,15 @@ void reverse(struct linkedListCircular *l)
 // function to copy the list to another list and return.
 struct linkedListCircular copyList(struct linkedListCircular l)
 {
-
     struct linkedListCircular copy;
     initLinkedList(&copy);
     // create a structure for storing copy and return with initalisation.
+
+    // added is list is empty condition so not to throw garbage value.
+    if (isEmpty(l))
+    {
+        return copy;
+    }
 
     struct node *orginalHead = l.head;
     // with the pointer upon the orginal list.
