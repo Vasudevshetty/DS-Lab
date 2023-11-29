@@ -22,13 +22,13 @@ void readStudentInfo(struct student *students, int N)
     {
         printf("Enter details of student %d,\n", i + 1);
         printf("Enter name : ");
-        scanf("%s", students[i].name);
+        scanf("%s", (students+i)->name);
         printf("Enter Registration number : ");
-        scanf("%d", &students[i].reg_no);
+        scanf("%d", &(students+i)->reg_no);
         printf("Marks in 3 tests: ");
         for (int j = 0; j < 3; j++)
         {
-            scanf("%d", &students[i].marks[j]);
+            scanf("%d", &(students+i)->marks[j]);
         }
         printf("\n");
     }
@@ -41,7 +41,7 @@ void calculateAverageMarks(struct student *students, int N)
     {  
         // calculate the average of best two marks and assign to the structure.
         // The array is sorted so the last few elements are the best.
-        students[i].average_marks = ((float)students[i].marks[1] + students[i].marks[2]) / 2.0;
+        (students+i)->average_marks = ((float)(students+i)->marks[1] + (students+i)->marks[2]) / 2.0;
         // type cast it & index are (n-2) and (n-1) respectively. (n = 3) marks array.;
     }
 }
@@ -55,11 +55,11 @@ void sortMarks(struct student *students, int N)
         {
             for (int k = j + 1; k < 3; k++)
             {
-                if (students[i].marks[j] > students[i].marks[k])
+                if ((students+i)->marks[j] > (students+i)->marks[k])
                 {
-                    int temp = students[i].marks[j];
-                    students[i].marks[j] = students[i].marks[k];
-                    students[i].marks[k] = temp;
+                    int temp = (students+i)->marks[j];
+                    (students+i)->marks[j] = (students+i)->marks[k];
+                    (students+i)->marks[k] = temp;
                 }
             }
         }
@@ -74,9 +74,9 @@ void displayStudentInfo(struct student *students, int N)
 
     for (int i = 0; i < N; i++)
     {
-        if (students[i].reg_no == 0)
+        if ((students+i)->reg_no == 0)
             anyStudents = 1;
-        if (students[i].average_marks == 0.0)
+        if ((students+i)->average_marks == 0.0)
             calculated = 1;
     }
 
@@ -95,12 +95,12 @@ void displayStudentInfo(struct student *students, int N)
     for (int i = 0; i < N; i++)
     {
         printf("Student %d\n", i + 1);
-        printf("Name : %s\n", students[i].name);
-        printf("Registration number: %d\n", students[i].reg_no);
+        printf("Name : %s\n", (students+i)->name);
+        printf("Registration number: %d\n", (students+i)->reg_no);
         printf("Marks in 3 tests are : ");
         for (int j = 0; j < 3; j++)
-            printf("%d, ", students[i].marks[j]);
-        printf("\nAverage marks (best of two): %.2f\n", students[i].average_marks);
+            printf("%d, ", (students+i)->marks[j]);
+        printf("\nAverage marks (best of two): %.2f\n", (students+i)->average_marks);
         printf("\n");
     }
 }
