@@ -39,30 +39,13 @@ void calculateAverageMarks(struct student *students, int N)
 {
     for (int i = 0; i < N; i++)
     {  
+        int min = ((students+i)->marks[0] < (students+i)->marks[1]) ? ((students+i)->marks[0] < (students+i)->marks[2]) ? 
+        (students+i)->marks[0] : (students+i)->marks[2] : ((students+i)->marks[1] < (students+i)->marks[2]) ? (students+i)->marks[1] :
+        (students+i)->marks[2];
         // calculate the average of best two marks and assign to the structure.
         // The array is sorted so the last few elements are the best.
-        (students+i)->average_marks = ((float)(students+i)->marks[1] + (students+i)->marks[2]) / 2.0;
+        (students+i)->average_marks =  (float)((students+i)->marks[0] + (students+i)->marks[1] + (students+i)->marks[2] - min)/ 2.0;
         // type cast it & index are (n-2) and (n-1) respectively. (n = 3) marks array.;
-    }
-}
-
-void sortMarks(struct student *students, int N)
-{
-    for (int i = 0; i < N; i++)
-    {
-        // sort the array so to get the best marks.
-        for (int j = 0; j < 2; j++)
-        {
-            for (int k = j + 1; k < 3; k++)
-            {
-                if ((students+i)->marks[j] > (students+i)->marks[k])
-                {
-                    int temp = (students+i)->marks[j];
-                    (students+i)->marks[j] = (students+i)->marks[k];
-                    (students+i)->marks[k] = temp;
-                }
-            }
-        }
     }
 }
 
@@ -143,7 +126,6 @@ int main()
         {
         case 1:
             readStudentInfo(students, N);
-            sortMarks(students, N);
             break;
         case 2:
             calculateAverageMarks(students, N);
