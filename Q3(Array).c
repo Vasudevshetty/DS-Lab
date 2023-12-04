@@ -7,7 +7,7 @@ v) Insert by order. vi) Search by key. vii) Search by position. viii) Reverse th
 #include <stdlib.h>
 
 #define max_size 100
-//maximum size of array.
+// maximum size of array.
 
 struct array
 {
@@ -24,7 +24,8 @@ struct array
 // passing as a value is enough due to its operation of printing and not in requirement of any changes.
 void display(struct array a)
 {
-    if(a.length == 0){
+    if (a.length == 0)
+    {
         printf("No elements to display...\n");
         return;
     }
@@ -32,7 +33,7 @@ void display(struct array a)
     printf("Elements of the array are,\n");
     for (int i = 0; i < a.length; i++)
     {
-        printf("%d ", a.array[i]);
+        printf("%d ", *(a.array + i));
     }
     printf("\n");
 }
@@ -98,10 +99,10 @@ void insertByPosition(struct array *a, int position, int value)
     // shifting of the value at the neighbourhood position takes place.
     for (int i = a->length; i > position; i--)
     {
-        a->array[i] = a->array[i - 1];
+        *(a->array + i) = *(a->array + i - 1);
     }
 
-    a->array[position] = value; // value is being inserted.
+    *(a->array+position) = value; // value is being inserted.
 
     // length variable is updated.
     a->length++;
@@ -135,7 +136,7 @@ int deleteByPosition(struct array *a, int position)
     // shifting the elements in place.
     for (int i = position; i < a->length - 1; i++)
     {
-        a->array[i] = a->array[i + 1];
+        *(a->array + i) = *(a->array + i + 1);
     }
 
     // decrease the length due to deletion of a element.
@@ -162,7 +163,7 @@ int searchByPosition(struct array a, int position)
 
     printf("Element %d found at position %d.\n", a.array[position], position);
 
-    return a.array[position];
+    return *(a.array+position);
 }
 
 // function to search the element by key and return with printing approprite msg.
@@ -172,7 +173,7 @@ int searchByKey(struct array a, int key)
     // simple linear search technique.
     for (int i = 0; i < a.length; i++)
     {
-        if (a.array[i] == key)
+        if (a.array[i] == key) // can be used pointer type too.
         {
             printf("Element %d found at position(index) %d.\n", key, i);
             return i;
@@ -186,16 +187,18 @@ int searchByKey(struct array a, int key)
 // passed as a reference so as it have changes in the array.
 void reverseArray(struct array *a)
 {
-    if(a->length == 0){
+    if (a->length == 0)
+    {
         printf("No elements to reverse.\n");
         return;
     }
     // swapping of the first and last counterparts happen in this logic, i.e first swaps with last, second with last-second , etc....
     for (int i = 0, j = a->length - 1; i < j; i++, j--)
     {
-        int temp = a->array[i];
-        a->array[i] = a->array[j];
-        a->array[j] = temp;
+        int temp = *(a->array+i);
+        *(a->array+i) = *(a->array+j);
+        *(a->array+j) = temp;
+        // can be done using indexing too.
     }
     printf("Reversed array is,\n");
     display(*a);
@@ -208,7 +211,7 @@ void insertByOrder(struct array *a, int value)
 {
     int position = 0;
 
-    while (position < a->length && a->array[position] < value) 
+    while (position < a->length && a->array[position] < value)
         position++;
 
     /*Since inserting by order requires a positon to be inserted while maintaining the order, finding the correct position is the only
@@ -328,4 +331,3 @@ int main()
     } while (choice != 10);
     return 0;
 }
-
