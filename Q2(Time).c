@@ -19,17 +19,19 @@ struct Time
 // function to read time
 void readTime(struct Time *t)
 {
-    //handeled case where the time format goes invalid.
+    // handeled case where the time format goes invalid.
     int isTimeValid = 0;
-    do{
+    do
+    {
         printf("Enter time (HH MM SS): ");
         scanf("%d %d %d", &t->hours, &t->minutes, &t->seconds);
         printf("\n");
 
-        if((t->hours >= 0 && t->hours <= 23) && (t->minutes >= 0 && t->minutes <= 59)
-        && (t->seconds >= 0 && t->seconds  <= 59)) isTimeValid = 1;
-        else printf("Invalid Time format! Please enter a valid time.\n");
-    }while(!isTimeValid);
+        if ((t->hours >= 0 && t->hours <= 23) && (t->minutes >= 0 && t->minutes <= 59) && (t->seconds >= 0 && t->seconds <= 59))
+            isTimeValid = 1;
+        else
+            printf("Invalid Time format! Please enter a valid time.\n");
+    } while (!isTimeValid);
 }
 
 // function to display time
@@ -78,14 +80,15 @@ struct Time addTime(struct Time *T1, struct Time *T2)
     {
         result.seconds -= 60;
         result.minutes++;
-        if (result.minutes >= 60)
-        {
-            result.minutes -= 60;
-            result.hours++;
-            if (result.hours >= 24)
-                result.hours -= 24;
-        }
     }
+    if (result.minutes >= 60)
+    {
+        result.minutes -= 60;
+        result.hours++;
+    }
+    if (result.hours >= 24)
+        result.hours -= 24;
+
     return result;
 }
 
