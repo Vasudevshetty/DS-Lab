@@ -12,63 +12,75 @@ when it is passed as a value, it just creates a local copy of it and no changes 
 #include <stdio.h>
 #include <stdlib.h>
 
-// structure for the nodes of linked list which contains data and a pointer to the next node as its members.
-struct node
+// structure for the nodes of linked list which contains data and a pointer to the next Node as its members.
+typedef struct node
 {
     int data;
     struct node *next;
-};
+}Node;
 
-// structure of linkedlist with node pointer of the head of the linkedlist(first node) and its length.
-struct linkedList
+// structure of linkedlist with Node pointer of the head of the linkedlist(first Node) and its length.
+typedef struct
 {
-    struct node *head;
+    Node *head;
     int length;
-};
+} linkedList;
 
 // function to check whether the linkedlist is emptpy. (type int returns 1(true) if empty else 0(false))
-int isEmpty(struct linkedList l)
+int isEmpty(linkedList *l)
 {
-    return !(l.head && l.length);
+    return !(l->head->next && l->length);
     /*this corresponds to the condition (l.head == NULL && l.length == 0) a boolean condtion where
     if both are true returns 1 the empty condtion and vice-versa*/
 }
 
-//function to check whether the function is sorted.
-int isSorted(struct linkedList l);
+// function to check whether the function is sorted.
+int isSorted(linkedList *l);
 
-// initalisation functions for node and linkedlist.
-void initNode(struct node *Node, int data);
-void initLinkedList(struct linkedList *l);
+// initalisation functions for Node and linkedlist.
+Node *createNode(int data);
+void initNode(Node *Node, int data);
+void initLinkedList(linkedList *l);
 
 // Insertion functions.
-void insertAtHead(struct linkedList *l, int data);
-void insertAtRear(struct linkedList *l, int data);
-void insertAtPosition(struct linkedList *l, int data, int position);
+void insertAtHead(linkedList *l, int data);
+void insertAtRear(linkedList *l, int data);
+void insertAtPosition(linkedList *l, int data, int position);
 
 // deletion functions.
 /*Delete functions return the value that got deleted.*/
-int deleteAtHead(struct linkedList *l);
-int deleteAtRear(struct linkedList *l);
-int deleteAtPosition(struct linkedList *l, int position);
+int deleteAtHead(linkedList *l);
+int deleteAtRear(linkedList *l);
+int deleteAtPosition(linkedList *l, int position);
 
 // operation on keys.
-struct node *searchByKey(struct linkedList l, int key);
-int deleteByKey(struct linkedList *l, int key);
+Node *searchByKey(linkedList *l, int key);
+int deleteByKey(linkedList *l, int key);
 
 // operations on linkedlist.
-void createOrderedList(struct linkedList *l, int data);
-void reverse(struct linkedList *l);
-struct linkedList copyList(struct linkedList orginal);
+void createOrderedList(linkedList *l, int data);
+void reverse(linkedList *l);
+linkedList* copyList(linkedList *orginal);
 
 // display function.
-void display(struct linkedList l);
+void display(linkedList *l);
+
+// destructor function for memory allocated using malloc.
+void destructLinkedList(linkedList *l){
+    Node* temp = l->head->next;
+    while(temp){
+        Node* next = temp->next;
+        free(temp);
+        temp = next;
+    }
+    l->head->next = NULL;
+}
 
 int main()
 {
-    struct linkedList l;
+    linkedList l;
     initLinkedList(&l);
-    struct linkedList copy;
+    linkedList *copy;
     int choice, data, position, key;
 
     do
@@ -93,7 +105,7 @@ int main()
         scanf("%d", &choice);
         printf("\n\n");
 
-        //added menu driven feature intend as you need.
+        // added menu driven feature intend as you need.
 
         switch (choice)
         {
@@ -101,13 +113,13 @@ int main()
             printf("Enter data to insert at front: ");
             scanf("%d", &data);
             insertAtHead(&l, data);
-            display(l);
+            display(&l);
             break;
         case 2:
             printf("Enter data to insert at rear: ");
             scanf("%d", &data);
             insertAtRear(&l, data);
-            display(l);
+            display(&l);
             break;
         case 3:
             printf("Enter data to insert: ");
@@ -115,53 +127,53 @@ int main()
             printf("Enter position to insert at: ");
             scanf("%d", &position);
             insertAtPosition(&l, data, position);
-            display(l);
+            display(&l);
             break;
         case 4:
             deleteAtHead(&l);
-            display(l);
+            display(&l);
             break;
         case 5:
             deleteAtRear(&l);
-            display(l);
+            display(&l);
             break;
         case 6:
             printf("Enter position to delete: ");
             scanf("%d", &position);
             deleteAtPosition(&l, position);
-            display(l);
+            display(&l);
             break;
         case 7:
             printf("Enter key to delete: ");
             scanf("%d", &key);
             deleteByKey(&l, key);
-            display(l);
+            display(&l);
             break;
         case 8:
             printf("Enter key to search: ");
             scanf("%d", &key);
-            searchByKey(l, key);
-            display(l);
+            searchByKey(&l, key);
+            display(&l);
             break;
         case 9:
             printf("Enter data to insert in the ordered list: ");
             scanf("%d", &data);
             createOrderedList(&l, data);
-            display(l);
+            display(&l);
             break;
         case 10:
             reverse(&l);
             printf("Reversed list is,\n");
-            display(l);
+            display(&l);
             break;
         case 11:
-            copy = copyList(l);
-            display(l);
+            copy = copyList(&l);
+            display(&l);
             printf("Copied list is,\n");
             display(copy);
             break;
         case 12:
-            display(l);
+            display(&l);
             break;
         case 13:
             printf("Exiting the program.\n");
@@ -171,57 +183,67 @@ int main()
             break;
         }
     } while (choice != 13);
+    
+    //deallocate the memmory for the list.
+    destructLinkedList(&l);
+    free(&l);
+
     return 0;
 }
 
-// function to initalise with the data given where its pointer(next) is always set to null.
-void initNode(struct node *Node, int data)
+// function to create Node and return the address of the Node.
+Node *createNode(int data)
 {
-    Node->data = data;
-    Node->next = NULL;
-}
-
-// function to initalise the linkedlist with null and length zero instead of garbage dump.
-void initLinkedList(struct linkedList *l)
-{
-    l->head = NULL;
-    l->length = 0;
-}
-
-// function to insert at head of the linkedlist(first node.).
-void insertAtHead(struct linkedList *l, int data)
-{
-    // create a new node and check whether the memory allocation is done or not.
-    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    // create a new Node and check whether the memory allocation is done or not.
+    Node *newNode = (Node *)malloc(sizeof(Node));
     //(newNode == NULL) this is the condition.
     if (!newNode)
     {
         printf("Memory allocation failed.\n");
-        return;
+        exit(1);
     }
-    // initalise the allocated new node.
+    // initalise the allocated new Node.
     initNode(newNode, data);
+    return newNode;
+}
+
+// function to initalise with the data given where its pointer(next) is always set to null.
+void initNode(Node *node, int data)
+{
+    node->data = data;
+    node->next = NULL;
+}
+
+// function to initalise the linkedlist with null and length zero instead of garbage dump.
+void initLinkedList(linkedList *l)
+{
+    // default head for further purpose.
+    l->head = createNode(0);
+    l->length = 0;
+}
+
+// function to insert at head of the linkedlist(first Node.).
+void insertAtHead(linkedList *l, int data)
+{
+    Node *newNode = createNode(data);
 
     // set the newNode's next to current head if there exits already a linkedlist.
-    if (l->head != NULL)
-        newNode->next = l->head;
-    // else case is taken care of by the initNode function initalising newNode's next to null.
-
-    // set the head of the linkedlist as the new node.
-    l->head = newNode;
-
+    newNode->next = l->head->next;
+    // else case is taken care of by the initNode function initalising newNode's next to null
+    // set the head's next of the linkedlist as the new Node.
+    l->head->next = newNode;
     // increment the length of the linkedlist.
     l->length++;
 }
 
-// function to insert a node at rear end of the linkedlist.
-void insertAtRear(struct linkedList *l, int data)
+// function to insert a Node at rear end of the linkedlist.
+void insertAtRear(linkedList *l, int data)
 {
     // A pointer temperary variable used to traverse along the linkedlist.
-    struct node *temp = l->head;
+    Node *temp = l->head->next;
 
     // if the head is null or the linkedlist is empty condtion. calling the insertAtHead fun.
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         insertAtHead(l, data);
         return;
@@ -233,18 +255,9 @@ void insertAtRear(struct linkedList *l, int data)
         temp = temp->next;
     }
 
-    // create a new node and check whether the memory allocation is done or not.
-    struct node *newNode = (struct node *)malloc(sizeof(struct node));
-    //(newNode == NULL) this is the condition.
-    if (!newNode)
-    {
-        printf("Memory allocation failed.\n");
-        return;
-    }
-    // initalise the allocated new node.
-    initNode(newNode, data);
+    Node *newNode = createNode(data);
 
-    // set the temp (last node)'s next pointer to newNode.
+    // set the temp (last Node)'s next pointer to newNode.
     temp->next = newNode;
 
     // increment the length variable.
@@ -252,7 +265,7 @@ void insertAtRear(struct linkedList *l, int data)
 }
 
 // function to insert at specific position.
-void insertAtPosition(struct linkedList *l, int data, int position)
+void insertAtPosition(linkedList *l, int data, int position)
 {
     // checking whether the given position given is valid or not.
     if (position < 0 || position > l->length)
@@ -264,24 +277,15 @@ void insertAtPosition(struct linkedList *l, int data, int position)
         // I have ignored and prompting for a valid position.
     }
 
-    // create a new node and check whether the memory allocation is done or not.
-    struct node *newNode = (struct node *)malloc(sizeof(struct node));
-    //(newNode == NULL) this is the condition.
-    if (!newNode)
-    {
-        printf("Memory allocation failed.\n");
-        return;
-    }
-    // initalise the allocated new node.
-    initNode(newNode, data);
+    Node *newNode = createNode(data);
 
-    struct node *temp = l->head;
+    Node *temp = l->head->next;
 
     // dealing with the head case.
     if (position == 0)
     {
         newNode->next = temp;
-        l->head = newNode;
+        l->head->next = newNode;
     }
     else
     {
@@ -303,21 +307,21 @@ void insertAtPosition(struct linkedList *l, int data, int position)
 }
 
 // function to delete the head of the linkedlist.
-int deleteAtHead(struct linkedList *l)
+int deleteAtHead(linkedList *l)
 {
     // checking whether the list is empty.
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         printf("No elements to delete.\n");
         return -1;
     }
 
     // creating a pointer to store the toDelete element.
-    struct node *toDelete = l->head;
+    Node *toDelete = l->head->next;
     // get the data of the element.
     int data = toDelete->data;
     // change the head of the element.
-    l->head = toDelete->next;
+    l->head->next = toDelete->next;
     // delete the current head (todelete)
     free(toDelete);
 
@@ -325,17 +329,17 @@ int deleteAtHead(struct linkedList *l)
     l->length--;
     // check whether the length is zero if make the head of the linkedlist null. (linkedlist empty condition.)..
     if (l->length == 0)
-        l->head = NULL;
+        l->head->next = NULL;
 
     // return the data of the element deleted.
     return data;
 }
 
 // function to delete at rear of the linkedlist.
-int deleteAtRear(struct linkedList *l)
+int deleteAtRear(linkedList *l)
 {
     // check whether the linkedlist is empty.
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         printf("No elements to delete.\n");
         return -1;
@@ -344,14 +348,14 @@ int deleteAtRear(struct linkedList *l)
     // base case .. if the length = 1 or only head makes the entire linkedlist.
     if (l->length == 1)
     {
-        int data = l->head->data;
-        free(l->head);
+        int data = l->head->next->data;
+        free(l->head->next);
         initLinkedList(l);
         return data;
     }
 
     // pointer to find the last element.
-    struct node *temp = l->head;
+    Node *temp = l->head->next;
 
     // traverse (slide) until the second last element.
     while (temp->next->next)
@@ -364,8 +368,8 @@ int deleteAtRear(struct linkedList *l)
       changing the last-sec element's next to null we actually lose the link of the rear(last) element and taking out the data we free it.
     */
 
-    // create a node to store the rear element's pointer.
-    struct node *toDelete = temp->next;
+    // create a Node to store the rear element's pointer.
+    Node *toDelete = temp->next;
     // store the data of that element.
     int data = toDelete->data;
     // change the last-second element's next pointer to null.
@@ -379,11 +383,11 @@ int deleteAtRear(struct linkedList *l)
 }
 
 // function to delete at a given position of the linkedlist.
-int deleteAtPosition(struct linkedList *l, int position)
+int deleteAtPosition(linkedList *l, int position)
 {
 
     // checking whether the given linkedlist is empty.
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         printf("No elements to delete.\n");
         return -1;
@@ -400,14 +404,14 @@ int deleteAtPosition(struct linkedList *l, int position)
     if (position == 0)
         return deleteAtHead(l);
 
-    struct node *temp = l->head;
+    Node *temp = l->head->next;
     // using the temp pointer reach to the position.
 
     for (int i = 0; i < position - 1; i++)
         temp = temp->next;
 
     // access the pointer of the position's element so as to free (delete.)
-    struct node *toDelete = temp->next;
+    Node *toDelete = temp->next;
     // change the links (skip the to be deleted element)
     temp->next = toDelete->next;
     // collect the data to return.
@@ -420,10 +424,10 @@ int deleteAtPosition(struct linkedList *l, int position)
     return data;
 }
 
-// function to search a key and return the address of the node(pointer)
-/*This function's return value is intentionaly made node pointer since it makes easier for the deleteByKey function easier. and it can
+// function to search a key and return the address of the Node(pointer)
+/*This function's return value is intentionaly made Node pointer since it makes easier for the deleteByKey function easier. and it can
 be even made as a message printing function or returning true(1) or false(0) functions too.*/
-struct node *searchByKey(struct linkedList l, int key)
+Node *searchByKey(linkedList *l, int key)
 {
     // check whether the list is empty.
     if (isEmpty(l))
@@ -433,7 +437,7 @@ struct node *searchByKey(struct linkedList l, int key)
     }
 
     // pointer to traverse.
-    struct node *temp = l.head;
+    Node *temp = l->head->next;
     // along traversing check whether the elements data matches key.
     while (temp)
     {
@@ -451,10 +455,10 @@ struct node *searchByKey(struct linkedList l, int key)
 }
 
 // function to delete a element by having a key.
-int deleteByKey(struct linkedList *l, int key)
+int deleteByKey(linkedList *l, int key)
 {
-    // get the node from the searchByKey()
-    struct node *toDelete = searchByKey(*l, key);
+    // get the Node from the searchByKey()
+    Node *toDelete = searchByKey(l, key);
 
     // check if it is null it is either the element is empty or
     // the element is not found then print and return correspondingly.
@@ -465,14 +469,14 @@ int deleteByKey(struct linkedList *l, int key)
     }
 
     // check the deletion conditions.
-    if (toDelete == l->head)
+    if (toDelete == l->head->next)
     {
         // if it is head then just make the next element as head.
-        l->head = toDelete->next;
+        l->head->next = toDelete->next;
     }
     else
     {
-        struct node *temp = l->head;
+        Node *temp = l->head->next;
 
         // if it isn't the head, then traverse until the next element is toDelete (key containing element) or previous element to toDelete.
         while (temp && temp->next != toDelete)
@@ -491,9 +495,9 @@ int deleteByKey(struct linkedList *l, int key)
 }
 
 // function to check whether the linkedlist is sorted or not.
-int isSorted(struct linkedList l)
+int isSorted(linkedList *l)
 {
-    struct node *temp = l.head;
+    Node *temp = l->head->next;
 
     // track the prev and next elements along checking whether they are sorted.
     while (temp && temp->next)
@@ -511,10 +515,10 @@ int isSorted(struct linkedList l)
 /*creation of linkedlist using this function must be a sorted list initally,
 else the code doesn't work, it do work but operation will not be as intended.*/
 // function to create ordered list. (acsending/sorted order).
-void createOrderedList(struct linkedList *l, int data)
+void createOrderedList(linkedList *l, int data)
 {
-    // create a new node and check whether the memory allocation is done or not.
-    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    // create a new Node and check whether the memory allocation is done or not.
+    Node *newNode = (Node *)malloc(sizeof(Node));
     //(newNode == NULL) this is the condition.
     if (!newNode)
     {
@@ -523,21 +527,21 @@ void createOrderedList(struct linkedList *l, int data)
     }
 
     // ensure the linkedlist is sorted.
-    if (isSorted(*l))
+    if (isSorted(l))
     {
 
         // base case, where the length is 0 or the data is the least then insert at head.
-        if (l->length == 0 || l->head->data >= data)
+        if (l->length == 0 || l->head->next->data >= data)
         {
             insertAtHead(l, data);
             return;
         }
 
-        // initalise new node.
+        // initalise new Node.
         initNode(newNode, data);
 
         // using temp pointer slide through until you find the element which is lesser than the newNode's data.
-        struct node *temp = l->head;
+        Node *temp = l->head->next;
         while (temp->next && temp->next->data < newNode->data)
         {
             temp = temp->next;
@@ -558,54 +562,54 @@ void createOrderedList(struct linkedList *l, int data)
 }
 
 // function to reverse a linkedlist.
-void reverse(struct linkedList *l)
+void reverse(linkedList *l)
 {
 
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         printf("No elements to reverse the linkedlist.\n");
         return;
     }
     // we have three pointers so as to manipulte the changes.
-    struct node *currentNode = l->head;
-    struct node *previousNode = NULL;
-    struct node *nextNode; // this remains unintalised.
+    Node *currentNode = l->head->next;
+    Node *previousNode = NULL;
+    Node *nextNode; // this remains unintalised.
 
     /*previousNode -> currentNode -> nextNode is the convenetional way we described. upon iterating inside the loop.
     we change this as nextNode->currentNode->previousNode.*/
 
     while (currentNode)
     {
-        // initally we store the current node's next pointer.
+        // initally we store the current Node's next pointer.
         nextNode = currentNode->next;
 
-        // upon storing we then change the next pointer of the current node to the previous node.
+        // upon storing we then change the next pointer of the current Node to the previous Node.
         currentNode->next = previousNode;
 
-        // then previous node now becomes the currentnode.
+        // then previous Node now becomes the currentnode.
         previousNode = currentNode;
 
-        // then currentNode now becomes previous node for the next iteration.
+        // then currentNode now becomes previous Node for the next iteration.
         currentNode = nextNode;
     }
 
     // this can be understood only with paperwork....
 
     // previousNode upon complete iteration becomes the new head.
-    l->head = previousNode;
+    l->head->next = previousNode;
 }
 
 // function to create a copy of the linked list and return a new linkedlist.
-struct linkedList copyList(struct linkedList orginal)
+linkedList* copyList(linkedList *orginal)
 {
-    struct linkedList copy; // create a copy linkedlist.
-    initLinkedList(&copy);  // initalize the linkedlist.
+    linkedList *copy = (linkedList*)malloc(sizeof(linkedList));       // create a copy linkedlist.
+    initLinkedList(copy); // initalize the linkedlist.
 
     // traverse the orginal list and insert elements into the copy.
-    struct node *temp = orginal.head;
+    Node *temp = orginal->head->next;
     while (temp)
     {
-        insertAtRear(&copy, temp->data); // insert each element to the rear of the linkedlist.
+        insertAtRear(copy, temp->data); // insert each element to the rear of the linkedlist.
         temp = temp->next;
     }
 
@@ -613,13 +617,13 @@ struct linkedList copyList(struct linkedList orginal)
     return copy;
 }
 
-void display(struct linkedList l)
+void display(linkedList *l)
 {
-    struct node *temp = l.head;
+    Node *temp = l->head->next;
     // keeping a pointer to slide through the linkedlist.
 
     // checking whether the linkedlist is empty or not.
-    if (l.length == 0 || temp == NULL)
+    if (isEmpty(l))
     {
         printf("No elements to display..\n");
         return;
