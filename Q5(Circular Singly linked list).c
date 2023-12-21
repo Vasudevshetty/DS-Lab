@@ -41,7 +41,8 @@ int isSorted(linkedListCircular *l);
 
 // initalisation functions for Node and linkedlist.
 void initNode(Node *Node, int data);
-void initLinkedList(linkedListCircular *l);
+linkedListCircular* initLinkedList();
+Node* createNode(int data);
 
 // Insertion functions.
 void insertAtHead(linkedListCircular *l, int data);
@@ -69,7 +70,7 @@ void display(linkedListCircular *l);
 // destructing function for allocated momory.
 void destructList(linkedListCircular *l){
     Node* temp = l->head;
-    while(temp){
+    while(temp != l->head){
         Node* next = temp->next;
         free(temp);
         temp = next;
@@ -77,11 +78,9 @@ void destructList(linkedListCircular *l){
     l->head = NULL;
 }
 
-
 int main()
 {
-    linkedListCircular l;
-    initLinkedList(&l);
+    linkedListCircular *l = initLinkedList();
     linkedListCircular *copy;
     int choice, data, position, key;
 
@@ -114,74 +113,73 @@ int main()
         case 1:
             printf("Enter data to insert at front: ");
             scanf("%d", &data);
-            insertAtHead(&l, data);
+            insertAtHead(l, data);
             printf("\n\n");
-            display(&l);
+            display(l);
             break;
         case 2:
             printf("Enter data to insert at rear: ");
             scanf("%d", &data);
-            insertAtRear(&l, data);
+            insertAtRear(l, data);
             printf("\n\n");
-            display(&l);
+            display(l);
             break;
         case 3:
             printf("Enter data to insert: ");
             scanf("%d", &data);
             printf("Enter position to insert at: ");
             scanf("%d", &position);
-            insertAtPosition(&l, data, position);
+            insertAtPosition(l, data, position);
             printf("\n\n");
-            display(&l);
+            display(l);
             break;
         case 4:
-            deleteAtHead(&l);
-            display(&l);
+            deleteAtHead(l);
+            display(l);
             break;
         case 5:
-            deleteAtRear(&l);
-            display(&l);
+            deleteAtRear(l);
+            display(l);
             break;
         case 6:
             printf("Enter position to delete: ");
             scanf("%d", &position);
-            deleteAtPosition(&l, position);
+            deleteAtPosition(l, position);
             printf("\n\n");
-            display(&l);
+            display(l);
             break;
         case 7:
             printf("Enter key to delete: ");
             scanf("%d", &key);
-            deleteByKey(&l, key);
+            deleteByKey(l, key);
             printf("\n\n");
-            display(&l);
+            display(l);
             break;
         case 8:
             printf("Enter key to search: ");
             scanf("%d", &key);
-            searchByKey(&l, key);
+            searchByKey(l, key);
             break;
         case 9:
             printf("Enter data to insert in the ordered list: ");
             scanf("%d", &data);
-            createOrderedList(&l, data);
+            createOrderedList(l, data);
             printf("\n\n");
-            display(&l);
+            display(l);
             break;
         case 10:
-            reverse(&l);
+            reverse(l);
             printf("Reversed list is,\n");
-            display(&l);
+            display(l);
             break;
         case 11:
-            copy = copyList(&l);
-            display(&l);
+            copy = copyList(l);
+            display(l);
             printf("Copied list is,\n");
             display(copy);
-            destructList(copy);
             break;
         case 12:
-            display(&l);
+            display(l);
             break;
         case 13:
             printf("Exiting the program....\n");
@@ -192,16 +190,38 @@ int main()
         }
     } while (choice != 13);
 
-    destructList(&l);
-
+    destructList(l);
+    destructList(copy);
+    free(l);
+    free(copy);
     return 0;
 }
 
+// function to create a node.
+Node* createNode(int data){
+    // create new Node initalise
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    // check whether allocated.
+    if (!newNode)
+    {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    initNode(newNode, data);
+    return newNode;
+}
+
 // function to initalise linkedlist with head pointing to null and length zero.
-void initLinkedList(linkedListCircular *l)
+linkedListCircular* initLinkedList()
 {
-    l->head = NULL;
-    l->length = 0;
+    linkedListCircular *list = (linkedListCircular*)malloc(sizeof(linkedListCircular));
+    if(!list){
+        printf("Memeory allocation failed.\n");
+        exit(1);
+    }
+    list->head = NULL;
+    list->length = 0;
+    return list;
 }
 
 // function to initalise Node with data and pointer pointing to itself.
@@ -259,15 +279,7 @@ void insertAtHead(linkedListCircular *l, int data)
         // if not circular and empty insert the head because empty list aren't circular.
     }
 
-    // create new Node initalise
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    // check whether allocated.
-    if (!newNode)
-    {
-        printf("Memory allocation failed.\n");
-        return;
-    }
-    initNode(newNode, data);
+    Node* newNode = createNode(data);
 
     // linkedlist head is null or empty make the newnode as head since intalisation makes it point to itself.
     if (!l->head)
@@ -312,15 +324,7 @@ void insertAtRear(linkedListCircular *l, int data)
         return insertAtHead(l, data);
     }
 
-    // create a newNode and check alloation if allocated initalise.
-    Node *newNode = (Node *)malloc(sizeof(Node));
-
-    if (!newNode)
-    {
-        printf("Memory allocation failed.\n");
-        return;
-    }
-    initNode(newNode, data);
+    Node* newNode = createNode(data);
 
     // find the last Node which makes it circular.
     Node *temp = l->head;
@@ -359,14 +363,7 @@ void insertAtPosition(linkedListCircular *l, int data, int position)
     if (position >= l->length)
         return insertAtRear(l, data);
 
-    // create a new Node check it's allocation and if allocated inatilase.
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    if (!newNode)
-    {
-        printf("Memory allocation failed. Insertion failed.\n");
-        return;
-    }
-    initNode(newNode, data);
+    Node* newNode = createNode(data);
 
     // create a temp pointer reach upto the just before desired position.
     Node *temp = l->head;
@@ -417,6 +414,7 @@ int deleteAtHead(linkedListCircular *l)
     free(l->head); // delete old head.
 
     // make new head as list's head.
+    if(newHead)
     l->head = newHead;
 
     // decrement the length and return the data.
@@ -589,7 +587,7 @@ int deleteByKey(linkedListCircular *l, int key)
     // it isn't the head or rear then, you can either fetch the Node and return or count the position and call deletebyposition fn.
     Node *temp = l->head;
     // here we find the Node just before the Node having the key is found.
-    while (temp->next != l->head && temp->next == toDelete)
+    while (temp->next != l->head && temp->next != toDelete)
     {
         temp = temp->next;
     }
@@ -709,8 +707,7 @@ void reverse(linkedListCircular *l)
 // function to copy the list to another list and return.
 linkedListCircular* copyList(linkedListCircular *l)
 {
-    linkedListCircular *copy = (linkedListCircular*)malloc(sizeof(linkedListCircular));
-    initLinkedList(copy);
+    linkedListCircular *copy = initLinkedList();
     // create a structure for storing copy and return with initalisation.
 
     // added is list is empty condition so not to throw garbage value.
