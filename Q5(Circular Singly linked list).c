@@ -11,66 +11,78 @@ vii) Creating a copy of the list*/
 #include <stdlib.h>
 
 // structure for nodes, having its data and pointer to next.
-struct node
+typedef struct node
 {
     int data;
     struct node *next;
-};
+}Node;
 
 // structure for linkedlist.
-struct linkedListCircular
+typedef struct
 {
     struct node *head;
     int length;
-};
+}linkedListCircular;
 
 // function to check whether the linkedlist is emptpy. (type int returns 1(true) if empty else 0(false))
-int isEmpty(struct linkedListCircular l)
+int isEmpty(linkedListCircular *l)
 {
-    return !(l.head && l.length);
-    /*this corresponds to the condition (l.head == NULL && l.length == 0) a boolean condtion where
+    return !(l->head && l->length);
+    /*this corresponds to the condition (l->head == NULL && l->length == 0) a boolean condtion where
     if both are true returns 1 the empty condtion and vice-versa*/
 }
 
 // function to confirm whether the linkedlist is circular or not.
 // returns 1(true) and 0(false) being int in return.
-int isCircular(struct linkedListCircular l);
+int isCircular(linkedListCircular *l);
 
 // function to check whether the function is sorted.
-int isSorted(struct linkedListCircular l);
+int isSorted(linkedListCircular *l);
 
-// initalisation functions for node and linkedlist.
-void initNode(struct node *Node, int data);
-void initLinkedList(struct linkedListCircular *l);
+// initalisation functions for Node and linkedlist.
+void initNode(Node *Node, int data);
+void initLinkedList(linkedListCircular *l);
 
 // Insertion functions.
-void insertAtHead(struct linkedListCircular *l, int data);
-void insertAtRear(struct linkedListCircular *l, int data);
-void insertAtPosition(struct linkedListCircular *l, int data, int position);
+void insertAtHead(linkedListCircular *l, int data);
+void insertAtRear(linkedListCircular *l, int data);
+void insertAtPosition(linkedListCircular *l, int data, int position);
 
 // deletion functions.
 /*Delete functions return the value that got deleted.*/
-int deleteAtHead(struct linkedListCircular *l);
-int deleteAtRear(struct linkedListCircular *l);
-int deleteAtPosition(struct linkedListCircular *l, int position);
+int deleteAtHead(linkedListCircular *l);
+int deleteAtRear(linkedListCircular *l);
+int deleteAtPosition(linkedListCircular *l, int position);
 
 // operation on keys.
-struct node *searchByKey(struct linkedListCircular l, int key);
-int deleteByKey(struct linkedListCircular *l, int key);
+Node *searchByKey(linkedListCircular *l, int key);
+int deleteByKey(linkedListCircular *l, int key);
 
 // operations on linkedlist.
-void createOrderedList(struct linkedListCircular *l, int data);
-void reverse(struct linkedListCircular *l);
-struct linkedListCircular copyList(struct linkedListCircular orginal);
+void createOrderedList(linkedListCircular *l, int data);
+void reverse(linkedListCircular *l);
+linkedListCircular* copyList(linkedListCircular* orginal);
 
 // display function.
-void display(struct linkedListCircular l);
+void display(linkedListCircular *l);
+
+// destructing function for allocated momory.
+void destructList(linkedListCircular *l){
+    Node* temp = l->head;
+    while(temp){
+        Node* next = temp->next;
+        free(temp);
+        temp = next;
+    }
+    l->head = NULL;
+}
+
 
 int main()
 {
-    struct linkedListCircular l;
+    linkedListCircular l;
     initLinkedList(&l);
-    struct linkedListCircular copy;
+    linkedListCircular *copy;
     int choice, data, position, key;
 
     do
@@ -104,14 +116,14 @@ int main()
             scanf("%d", &data);
             insertAtHead(&l, data);
             printf("\n\n");
-            display(l);
+            display(&l);
             break;
         case 2:
             printf("Enter data to insert at rear: ");
             scanf("%d", &data);
             insertAtRear(&l, data);
             printf("\n\n");
-            display(l);
+            display(&l);
             break;
         case 3:
             printf("Enter data to insert: ");
@@ -120,55 +132,56 @@ int main()
             scanf("%d", &position);
             insertAtPosition(&l, data, position);
             printf("\n\n");
-            display(l);
+            display(&l);
             break;
         case 4:
             deleteAtHead(&l);
-            display(l);
+            display(&l);
             break;
         case 5:
             deleteAtRear(&l);
-            display(l);
+            display(&l);
             break;
         case 6:
             printf("Enter position to delete: ");
             scanf("%d", &position);
             deleteAtPosition(&l, position);
             printf("\n\n");
-            display(l);
+            display(&l);
             break;
         case 7:
             printf("Enter key to delete: ");
             scanf("%d", &key);
             deleteByKey(&l, key);
             printf("\n\n");
-            display(l);
+            display(&l);
             break;
         case 8:
             printf("Enter key to search: ");
             scanf("%d", &key);
-            searchByKey(l, key);
+            searchByKey(&l, key);
             break;
         case 9:
             printf("Enter data to insert in the ordered list: ");
             scanf("%d", &data);
             createOrderedList(&l, data);
             printf("\n\n");
-            display(l);
+            display(&l);
             break;
         case 10:
             reverse(&l);
             printf("Reversed list is,\n");
-            display(l);
+            display(&l);
             break;
         case 11:
-            copy = copyList(l);
-            display(l);
+            copy = copyList(&l);
+            display(&l);
             printf("Copied list is,\n");
             display(copy);
+            destructList(copy);
             break;
         case 12:
-            display(l);
+            display(&l);
             break;
         case 13:
             printf("Exiting the program....\n");
@@ -178,25 +191,28 @@ int main()
             break;
         }
     } while (choice != 13);
+
+    destructList(&l);
+
     return 0;
 }
 
 // function to initalise linkedlist with head pointing to null and length zero.
-void initLinkedList(struct linkedListCircular *l)
+void initLinkedList(linkedListCircular *l)
 {
     l->head = NULL;
     l->length = 0;
 }
 
-// function to initalise node with data and pointer pointing to itself.
-void initNode(struct node *Node, int data)
+// function to initalise Node with data and pointer pointing to itself.
+void initNode(Node *Node, int data)
 {
     Node->data = data;
     Node->next = Node; // since circular it points to itself.
 }
 
 // function to check whether the given linkedlist is circular or not.
-int isCircular(struct linkedListCircular l)
+int isCircular(linkedListCircular *l)
 {
     // An empty list is not considerd circular.
     if (isEmpty(l))
@@ -205,8 +221,8 @@ int isCircular(struct linkedListCircular l)
         return 0; // false.
     }
 
-    struct node *slow = l.head; // tortoise
-    struct node *fast = l.head; // hare
+    Node *slow = l->head; // tortoise
+    Node *fast = l->head; // hare
 
     // fast poniter moves 2 steps at a time.
     // slow pointer moves 1 step at a time.
@@ -229,13 +245,13 @@ int isCircular(struct linkedListCircular l)
 }
 
 // function to insert at head of the linkedlist.
-void insertAtHead(struct linkedListCircular *l, int data)
+void insertAtHead(linkedListCircular *l, int data)
 {
     // checks whether the linkedlist is empty or not.
-    if (!isEmpty(*l))
+    if (!isEmpty(l))
     {
         // if not empty and not circular you cannot insert head to a normal linkedlist.
-        if (!isCircular(*l))
+        if (!isCircular(l))
         {
             printf("List isn't circular being not empty, Operation failed.\n");
             return;
@@ -243,8 +259,8 @@ void insertAtHead(struct linkedListCircular *l, int data)
         // if not circular and empty insert the head because empty list aren't circular.
     }
 
-    // create new node initalise
-    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    // create new Node initalise
+    Node *newNode = (Node *)malloc(sizeof(Node));
     // check whether allocated.
     if (!newNode)
     {
@@ -258,7 +274,7 @@ void insertAtHead(struct linkedListCircular *l, int data)
         l->head = newNode;
     else
         newNode->next = l->head; // if it isn't empty just add the head part to the newnode's next.
-    struct node *temp = l->head;
+    Node *temp = l->head;
 
     // upon insertion the linked list turns linear with a loop so as to make it circular.
 
@@ -277,13 +293,13 @@ void insertAtHead(struct linkedListCircular *l, int data)
 }
 
 // function to insert at rear of the linkedlist.
-void insertAtRear(struct linkedListCircular *l, int data)
+void insertAtRear(linkedListCircular *l, int data)
 {
     // check whether the list is empty or not.
-    if (!isEmpty(*l))
+    if (!isEmpty(l))
     {
         // if not empty check whether it isn't circular
-        if (!isCircular(*l))
+        if (!isCircular(l))
         {
             // to maintain circularity print a message and return.
             printf("List isn't circular, insertion failed.\n");
@@ -292,12 +308,12 @@ void insertAtRear(struct linkedListCircular *l, int data)
     }
     else
     {
-        // if empty insert this as a head node or a single node since insertion at rear becomes equal to insertion at head.
+        // if empty insert this as a head Node or a single Node since insertion at rear becomes equal to insertion at head.
         return insertAtHead(l, data);
     }
 
     // create a newNode and check alloation if allocated initalise.
-    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    Node *newNode = (Node *)malloc(sizeof(Node));
 
     if (!newNode)
     {
@@ -306,14 +322,14 @@ void insertAtRear(struct linkedListCircular *l, int data)
     }
     initNode(newNode, data);
 
-    // find the last node which makes it circular.
-    struct node *temp = l->head;
+    // find the last Node which makes it circular.
+    Node *temp = l->head;
 
     while (temp->next != l->head)
     {
         temp = temp->next;
     }
-    // make the newnode as last node.
+    // make the newnode as last Node.
     temp->next = newNode;
     // make it circular.
     newNode->next = l->head;
@@ -322,13 +338,13 @@ void insertAtRear(struct linkedListCircular *l, int data)
     // increment the length.
 }
 
-void insertAtPosition(struct linkedListCircular *l, int data, int position)
+void insertAtPosition(linkedListCircular *l, int data, int position)
 {
     // check the list is empty or not
-    if (!isEmpty(*l))
+    if (!isEmpty(l))
     {
         // if not empty check whether it is circular.
-        if (!isCircular(*l))
+        if (!isCircular(l))
         {
             // if isn't circular so as to maintain circularity print and return.
             printf("List isn't circular. Insertion.\n");
@@ -343,8 +359,8 @@ void insertAtPosition(struct linkedListCircular *l, int data, int position)
     if (position >= l->length)
         return insertAtRear(l, data);
 
-    // create a new node check it's allocation and if allocated inatilase.
-    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    // create a new Node check it's allocation and if allocated inatilase.
+    Node *newNode = (Node *)malloc(sizeof(Node));
     if (!newNode)
     {
         printf("Memory allocation failed. Insertion failed.\n");
@@ -353,11 +369,11 @@ void insertAtPosition(struct linkedListCircular *l, int data, int position)
     initNode(newNode, data);
 
     // create a temp pointer reach upto the just before desired position.
-    struct node *temp = l->head;
+    Node *temp = l->head;
     for (int i = 0; i < position - 1; i++)
         temp = temp->next;
 
-    // update the pointers to insert new node at that position.
+    // update the pointers to insert new Node at that position.
     newNode->next = temp->next;
     temp->next = newNode;
 
@@ -365,10 +381,10 @@ void insertAtPosition(struct linkedListCircular *l, int data, int position)
     l->length++;
 }
 
-int deleteAtHead(struct linkedListCircular *l)
+int deleteAtHead(linkedListCircular *l)
 {
     // if empty we can't delete.
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         printf("No elements to delete\n");
         return -1;
@@ -376,7 +392,7 @@ int deleteAtHead(struct linkedListCircular *l)
     else
     {
         // if not empty check whether it isn't circular
-        if (!isCircular(*l))
+        if (!isCircular(l))
         {
             // if it isn't circular print msg and return since to maintain circularity
             printf("List isn't circular. Deletion failed.\n");
@@ -387,10 +403,10 @@ int deleteAtHead(struct linkedListCircular *l)
     // take out the data of the head.
     int data = l->head->data;
     // store the new head's address.
-    struct node *newHead = l->head->next;
+    Node *newHead = l->head->next;
 
-    // traverse until the last node.
-    struct node *temp = l->head;
+    // traverse until the last Node.
+    Node *temp = l->head;
     while (temp->next != l->head)
     {
         temp = temp->next;
@@ -409,10 +425,10 @@ int deleteAtHead(struct linkedListCircular *l)
 }
 
 // function to delete at rear of the linked list.
-int deleteAtRear(struct linkedListCircular *l)
+int deleteAtRear(linkedListCircular *l)
 {
     // checks whether it is emtpy.
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         printf("No elements to delete.\n");
         return -1;
@@ -420,7 +436,7 @@ int deleteAtRear(struct linkedListCircular *l)
     else
     {
         // if not empty checks whether it isn't circular.
-        if (!isCircular(*l))
+        if (!isCircular(l))
         {
             // if not circular, deletion gets incompatible so returns with a error msg.
             printf("List isn't circular. Deletion is incompatible.\n");
@@ -428,20 +444,20 @@ int deleteAtRear(struct linkedListCircular *l)
         }
     }
 
-    // traverse until last-second node.
-    struct node *temp = l->head;
+    // traverse until last-second Node.
+    Node *temp = l->head;
     while (temp->next->next != l->head)
     {
         temp = temp->next;
     }
 
-    // take the last node to todelete extract data.
-    struct node *toDelete = temp->next;
+    // take the last Node to todelete extract data.
+    Node *toDelete = temp->next;
     int data = toDelete->data;
 
-    // change the link of the last-second node(new rear element) to head of list to maintian circularity.
+    // change the link of the last-second Node(new rear element) to head of list to maintian circularity.
     temp->next = l->head;
-    free(toDelete); // alongside delete the node.
+    free(toDelete); // alongside delete the Node.
 
     // alongside decrement the length of the list with returning the data.
     l->length--;
@@ -449,10 +465,10 @@ int deleteAtRear(struct linkedListCircular *l)
 }
 
 // function to delete at given position in a linked list.
-int deleteAtPosition(struct linkedListCircular *l, int position)
+int deleteAtPosition(linkedListCircular *l, int position)
 {
     // check whether it is empty.
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         printf("No elements to delete.\n");
         return -1;
@@ -460,7 +476,7 @@ int deleteAtPosition(struct linkedListCircular *l, int position)
     else
     {
         // check if it is circular.
-        if (!isCircular(*l))
+        if (!isCircular(l))
         {
             // if it isn't to maintain circularity return with a erro msg.
             printf("List isn't circular. Deletion incompatible.\n");
@@ -479,12 +495,12 @@ int deleteAtPosition(struct linkedListCircular *l, int position)
         return deleteAtRear(l);
 
     // if it lies in the range take a pointer and move upto desired position.
-    struct node *temp = l->head;
+    Node *temp = l->head;
     for (int i = 0; i < position - 1; i++)
         temp = temp->next;
 
     // take out the address and extract data of the element at that position.
-    struct node *toDelete = temp->next;
+    Node *toDelete = temp->next;
     int data = toDelete->data;
 
     // change the links (skip the to be deleted element).
@@ -496,8 +512,8 @@ int deleteAtPosition(struct linkedListCircular *l, int position)
     return data;
 }
 
-// function to search a key and return the address(node's).
-struct node *searchByKey(struct linkedListCircular l, int key)
+// function to search a key and return the address(Node's).
+Node *searchByKey(linkedListCircular *l, int key)
 {
     // as usual check whether it is empty and circular.
     if (isEmpty(l))
@@ -516,7 +532,7 @@ struct node *searchByKey(struct linkedListCircular l, int key)
     }
 
     // traverse the linked list alongside checking whether it is equal to key.
-    struct node *temp = l.head;
+    Node *temp = l->head;
 
     do
     {
@@ -526,32 +542,32 @@ struct node *searchByKey(struct linkedListCircular l, int key)
             return temp;
         }
         temp = temp->next;
-    } while (temp != l.head);
+    } while (temp != l->head);
 
     printf("No element found.\n");
     return NULL;
 }
 
 // function to delete the key present in a linkedlist.
-int deleteByKey(struct linkedListCircular *l, int key)
+int deleteByKey(linkedListCircular *l, int key)
 {
     // check whether the given list is valid.
-    if (isEmpty(*l))
+    if (isEmpty(l))
     {
         printf("No elements to delete.\n");
         return -1;
     }
     else
     {
-        if (!isCircular(*l))
+        if (!isCircular(l))
         {
             printf("List isn't circular. Deletion incompatible.\n");
             return -1;
         }
     }
 
-    // access the node fromt the search fn
-    struct node *toDelete = searchByKey(*l, key);
+    // access the Node fromt the search fn
+    Node *toDelete = searchByKey(l, key);
 
     // if the fn returns null then print element not found to delete and return.
     if (!toDelete)
@@ -570,9 +586,9 @@ int deleteByKey(struct linkedListCircular *l, int key)
     if (toDelete->next == l->head)
         return deleteAtRear(l);
 
-    // it isn't the head or rear then, you can either fetch the node and return or count the position and call deletebyposition fn.
-    struct node *temp = l->head;
-    // here we find the node just before the node having the key is found.
+    // it isn't the head or rear then, you can either fetch the Node and return or count the position and call deletebyposition fn.
+    Node *temp = l->head;
+    // here we find the Node just before the Node having the key is found.
     while (temp->next != l->head && temp->next == toDelete)
     {
         temp = temp->next;
@@ -588,7 +604,7 @@ int deleteByKey(struct linkedListCircular *l, int key)
 }
 
 // function to check whether the list is sorted in ascending order or not.
-int isSorted(struct linkedListCircular l)
+int isSorted(linkedListCircular *l)
 {
     // if the list is empty return as true (sorted).
     if (isEmpty(l))
@@ -597,7 +613,7 @@ int isSorted(struct linkedListCircular l)
     }
 
     // using temp pointer check whether every pair is in sorted order.
-    struct node *temp = l.head;
+    Node *temp = l->head;
     do
     {
         // if any found as not sorted return false.
@@ -606,19 +622,19 @@ int isSorted(struct linkedListCircular l)
             return 0;
         }
         temp = temp->next;
-    } while (temp != l.head && temp->next != NULL);
+    } while (temp != l->head && temp->next != NULL);
 
     // if it gets out of the loop it means the list is sorted in ascending order.
     return 1;
 }
 
 // function to create a ordered list.
-void createOrderedList(struct linkedListCircular *l, int data)
+void createOrderedList(linkedListCircular *l, int data)
 {
     // check whether the list is valid.
-    if (!isEmpty(*l))
+    if (!isEmpty(l))
     {
-        if (!isCircular(*l))
+        if (!isCircular(l))
         {
             printf("List isn't circular. Insertion failed.\n");
             return;
@@ -638,7 +654,7 @@ void createOrderedList(struct linkedListCircular *l, int data)
 
     // suppose the data is not the least or the largest find its position.
     int position = 0;
-    struct node *temp = l->head;
+    Node *temp = l->head;
 
     do
     {
@@ -659,18 +675,18 @@ void createOrderedList(struct linkedListCircular *l, int data)
 }
 
 // function to reverse the linkedlist.
-void reverse(struct linkedListCircular *l)
+void reverse(linkedListCircular *l)
 {
     // if the list is empty or either the list conatins only one element the list is already reversed.
-    if (isEmpty(*l) || l->length == 1)
+    if (isEmpty(l) || l->length == 1)
     {
         return;
     }
 
     // have three pointers.
-    struct node *current = l->head;
-    struct node *prev = NULL;
-    struct node *next;
+    Node *current = l->head;
+    Node *prev = NULL;
+    Node *next;
 
     // change links along traversing.
     do
@@ -691,10 +707,10 @@ void reverse(struct linkedListCircular *l)
 }
 
 // function to copy the list to another list and return.
-struct linkedListCircular copyList(struct linkedListCircular l)
+linkedListCircular* copyList(linkedListCircular *l)
 {
-    struct linkedListCircular copy;
-    initLinkedList(&copy);
+    linkedListCircular *copy = (linkedListCircular*)malloc(sizeof(linkedListCircular));
+    initLinkedList(copy);
     // create a structure for storing copy and return with initalisation.
 
     // added is list is empty condition so not to throw garbage value.
@@ -703,20 +719,20 @@ struct linkedListCircular copyList(struct linkedListCircular l)
         return copy;
     }
 
-    struct node *orginalHead = l.head;
+    Node *orginalHead = l->head;
     // with the pointer upon the orginal list.
     do
     {
         // upon traversing fetch the data and insert in the copy list alongside.
-        insertAtRear(&copy, orginalHead->data);
+        insertAtRear(copy, orginalHead->data);
         orginalHead = orginalHead->next;
-    } while (orginalHead != l.head);
+    } while (orginalHead != l->head);
 
     // upon successfull copying return the copy.
     return copy;
 }
 
-void display(struct linkedListCircular l)
+void display(linkedListCircular *l)
 {
     // checking whether the list is empty
     if (isEmpty(l))
@@ -732,7 +748,7 @@ void display(struct linkedListCircular l)
         return;
     }
 
-    struct node *temp = l.head;
+    Node *temp = l->head;
 
     /*Using the temp pointer we traverse along the linked list until we find again the head of the linked list.(note the usage
     of do-while loop).*/
@@ -741,7 +757,7 @@ void display(struct linkedListCircular l)
     {
         printf("%d->", temp->data);
         temp = temp->next;
-    } while (temp != l.head);
-    printf("%d\n", l.head->data);
+    } while (temp != l->head);
+    printf("%d\n", l->head->data);
     // above intedentation is to look like ex.(1->2->3->1).
 }
