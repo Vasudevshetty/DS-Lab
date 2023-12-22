@@ -17,7 +17,7 @@ typedef struct node
 {
     int data;
     struct node *next;
-}Node;
+} Node;
 
 // structure of linkedlist with Node pointer of the head of the linkedlist(first Node) and its length.
 typedef struct
@@ -27,58 +27,61 @@ typedef struct
 } linkedList;
 
 // function to check whether the linkedlist is emptpy. (type int returns 1(true) if empty else 0(false))
-int isEmpty(linkedList *l)
+int isEmpty(linkedList *myList)
 {
-    return !(l->head->next && l->length);
-    /*this corresponds to the condition (l.head == NULL && l.length == 0) a boolean condtion where
+    return !(myList->head->next && myList->length);
+    /*this corresponds to the condition (myList.head == NULL && myList.length == 0) a boolean condtion where
     if both are true returns 1 the empty condtion and vice-versa*/
 }
 
 // function to check whether the function is sorted.
-int isSorted(linkedList *l);
+int isSorted(linkedList *myList);
 
 // initalisation functions for Node and linkedlist.
 Node *createNode(int data);
 void initNode(Node *Node, int data);
-linkedList* initLinkedList();
+linkedList *initLinkedList();
 
 // Insertion functions.
-void insertAtHead(linkedList *l, int data);
-void insertAtRear(linkedList *l, int data);
-void insertAtPosition(linkedList *l, int data, int position);
+void insertAtHead(linkedList *myList, int data);
+void insertAtRear(linkedList *myList, int data);
+void insertAtPosition(linkedList *myList, int data, int position);
 
 // deletion functions.
 /*Delete functions return the value that got deleted.*/
-int deleteAtHead(linkedList *l);
-int deleteAtRear(linkedList *l);
-int deleteAtPosition(linkedList *l, int position);
+int deleteAtHead(linkedList *myList);
+int deleteAtRear(linkedList *myList);
+int deleteAtPosition(linkedList *myList, int position);
 
 // operation on keys.
-Node *searchByKey(linkedList *l, int key);
-int deleteByKey(linkedList *l, int key);
+Node *searchByKey(linkedList *myList, int key);
+int deleteByKey(linkedList *myList, int key);
 
 // operations on linkedlist.
-void createOrderedList(linkedList *l, int data);
-void reverse(linkedList *l);
-linkedList* copyList(linkedList *orginal);
+void createOrderedList(linkedList *myList, int data);
+void reverse(linkedList *myList);
+linkedList *copyList(linkedList *orginal);
 
 // display function.
-void display(linkedList *l);
+void display(linkedList *myList);
 
 // destructor function for memory allocated using malloc.
-void destructLinkedList(linkedList *l){
-    Node* temp = l->head->next;
-    while(temp){
-        Node* next = temp->next;
+void destructLinkedList(linkedList *myList)
+{
+    Node *temp = myList->head->next;
+    while (temp)
+    {
+        Node *next = temp->next;
         free(temp);
         temp = next;
     }
-    l->head->next = NULL;
+    myList->head->next = NULL;
+    free(myList);
 }
 
 int main()
 {
-    linkedList *l = initLinkedList();
+    linkedList *myList = initLinkedList();
     linkedList *copy;
     int choice, data, position, key;
 
@@ -111,68 +114,69 @@ int main()
         case 1:
             printf("Enter data to insert at front: ");
             scanf("%d", &data);
-            insertAtHead(l, data);
-            display(l);
+            insertAtHead(myList, data);
+            display(myList);
             break;
         case 2:
             printf("Enter data to insert at rear: ");
             scanf("%d", &data);
-            insertAtRear(l, data);
-            display(l);
+            insertAtRear(myList, data);
+            display(myList);
             break;
         case 3:
             printf("Enter data to insert: ");
             scanf("%d", &data);
             printf("Enter position to insert at: ");
             scanf("%d", &position);
-            insertAtPosition(l, data, position);
-            display(l);
+            insertAtPosition(myList, data, position);
+            display(myList);
             break;
         case 4:
-            deleteAtHead(l);
-            display(l);
+            deleteAtHead(myList);
+            display(myList);
             break;
         case 5:
-            deleteAtRear(l);
-            display(l);
+            deleteAtRear(myList);
+            display(myList);
             break;
         case 6:
             printf("Enter position to delete: ");
             scanf("%d", &position);
-            deleteAtPosition(l, position);
-            display(l);
+            deleteAtPosition(myList, position);
+            display(myList);
             break;
         case 7:
             printf("Enter key to delete: ");
             scanf("%d", &key);
-            deleteByKey(l, key);
-            display(l);
+            deleteByKey(myList, key);
+            display(myList);
             break;
         case 8:
             printf("Enter key to search: ");
             scanf("%d", &key);
-            searchByKey(l, key);
-            display(l);
+            searchByKey(myList, key);
+            display(myList);
             break;
         case 9:
             printf("Enter data to insert in the ordered list: ");
             scanf("%d", &data);
-            createOrderedList(l, data);
-            display(l);
+            createOrderedList(myList, data);
+            display(myList);
             break;
         case 10:
-            reverse(l);
+            reverse(myList);
             printf("Reversed list is,\n");
-            display(l);
+            display(myList);
             break;
         case 11:
-            copy = copyList(l);
-            display(l);
+            copy = copyList(myList);
+            display(myList);
             printf("Copied list is,\n");
             display(copy);
+            destructLinkedList(copy);
             break;
         case 12:
-            display(l);
+            display(myList);
             break;
         case 13:
             printf("Exiting the program.\n");
@@ -182,10 +186,9 @@ int main()
             break;
         }
     } while (choice != 13);
-    
-    //deallocate the memmory for the list.
-    destructLinkedList(l);
-    free(l);
+
+    // deallocate the memmory for the list.
+    destructLinkedList(myList);
 
     return 0;
 }
@@ -214,43 +217,44 @@ void initNode(Node *node, int data)
 }
 
 // function to initalise the linkedlist with null and length zero instead of garbage dump.
-linkedList* initLinkedList()
+linkedList *initLinkedList()
 {
-    linkedList *l = (linkedList*) malloc (sizeof(linkedList));
-    if(!l){
+    linkedList *myList = (linkedList *)malloc(sizeof(linkedList));
+    if (!myList)
+    {
         printf("Memory allcocation failed.\n");
         exit(1);
     }
     // default head for further purpose.
-    l->head = createNode(0);
-    l->length = 0;
-    return l;
+    myList->head = createNode(0);
+    myList->length = 0;
+    return myList;
 }
 
 // function to insert at head of the linkedlist(first Node.).
-void insertAtHead(linkedList *l, int data)
+void insertAtHead(linkedList *myList, int data)
 {
     Node *newNode = createNode(data);
 
     // set the newNode's next to current head if there exits already a linkedlist.
-    newNode->next = l->head->next;
+    newNode->next = myList->head->next;
     // else case is taken care of by the initNode function initalising newNode's next to null
     // set the head's next of the linkedlist as the new Node.
-    l->head->next = newNode;
+    myList->head->next = newNode;
     // increment the length of the linkedlist.
-    l->length++;
+    myList->length++;
 }
 
 // function to insert a Node at rear end of the linkedlist.
-void insertAtRear(linkedList *l, int data)
+void insertAtRear(linkedList *myList, int data)
 {
     // A pointer temperary variable used to traverse along the linkedlist.
-    Node *temp = l->head->next;
+    Node *temp = myList->head->next;
 
     // if the head is null or the linkedlist is empty condtion. calling the insertAtHead fun.
-    if (isEmpty(l))
+    if (isEmpty(myList))
     {
-        insertAtHead(l, data);
+        insertAtHead(myList, data);
         return;
     }
 
@@ -266,14 +270,14 @@ void insertAtRear(linkedList *l, int data)
     temp->next = newNode;
 
     // increment the length variable.
-    l->length++;
+    myList->length++;
 }
 
 // function to insert at specific position.
-void insertAtPosition(linkedList *l, int data, int position)
+void insertAtPosition(linkedList *myList, int data, int position)
 {
     // checking whether the given position given is valid or not.
-    if (position < 0 || position > l->length)
+    if (position < 0 || position > myList->length)
     {
         printf("Invalid position to insert. Please enter a valid one.\n");
         return;
@@ -284,13 +288,13 @@ void insertAtPosition(linkedList *l, int data, int position)
 
     Node *newNode = createNode(data);
 
-    Node *temp = l->head->next;
+    Node *temp = myList->head->next;
 
     // dealing with the head case.
     if (position == 0)
     {
         newNode->next = temp;
-        l->head->next = newNode;
+        myList->head->next = newNode;
     }
     else
     {
@@ -308,56 +312,56 @@ void insertAtPosition(linkedList *l, int data, int position)
         // performing change of links correctly.
     }
     // incrementing the length of the linkedlist by one.
-    l->length++;
+    myList->length++;
 }
 
 // function to delete the head of the linkedlist.
-int deleteAtHead(linkedList *l)
+int deleteAtHead(linkedList *myList)
 {
     // checking whether the list is empty.
-    if (isEmpty(l))
+    if (isEmpty(myList))
     {
         printf("No elements to delete.\n");
         return -1;
     }
 
     // creating a pointer to store the toDelete element.
-    Node *toDelete = l->head->next;
+    Node *toDelete = myList->head->next;
     // get the data of the element.
     int data = toDelete->data;
     // change the head of the element.
-    l->head->next = toDelete->next;
+    myList->head->next = toDelete->next;
     // delete the current head (todelete)
     free(toDelete);
 
     // decrement the length.
-    l->length--;
+    myList->length--;
     // check whether the length is zero if make the head of the linkedlist null. (linkedlist empty condition.)..
-    if (l->length == 0)
-        l->head->next = NULL;
+    if (myList->length == 0)
+        myList->head->next = NULL;
 
     // return the data of the element deleted.
     return data;
 }
 
 // function to delete at rear of the linkedlist.
-int deleteAtRear(linkedList *l)
+int deleteAtRear(linkedList *myList)
 {
     // check whether the linkedlist is empty.
-    if (isEmpty(l))
+    if (isEmpty(myList))
     {
         printf("No elements to delete.\n");
         return -1;
     }
 
     // base case .. if the length = 1 or only head makes the entire linkedlist.
-    if (l->length == 1)
+    if (myList->length == 1)
     {
-        return deleteAtHead(l);
+        return deleteAtHead(myList);
     }
 
     // pointer to find the last element.
-    Node *temp = l->head->next;
+    Node *temp = myList->head->next;
 
     // traverse (slide) until the second last element.
     while (temp->next->next)
@@ -380,23 +384,23 @@ int deleteAtRear(linkedList *l)
     free(toDelete);
 
     // decrement the length and return the deleted element's data.
-    l->length--;
+    myList->length--;
     return data;
 }
 
 // function to delete at a given position of the linkedlist.
-int deleteAtPosition(linkedList *l, int position)
+int deleteAtPosition(linkedList *myList, int position)
 {
 
     // checking whether the given linkedlist is empty.
-    if (isEmpty(l))
+    if (isEmpty(myList))
     {
         printf("No elements to delete.\n");
         return -1;
     }
 
     // checking whether the given position is valid or not.
-    if (position < 0 || position > l->length)
+    if (position < 0 || position > myList->length)
     {
         printf("Not a valid position to delete.\n");
         return -1;
@@ -404,9 +408,11 @@ int deleteAtPosition(linkedList *l, int position)
 
     // if the position given is head (0th position.)
     if (position == 0)
-        return deleteAtHead(l);
+        return deleteAtHead(myList);
+    if (position == myList->length)
+        return deleteAtRear(myList);
 
-    Node *temp = l->head->next;
+    Node *temp = myList->head->next;
     // using the temp pointer reach to the position.
 
     for (int i = 0; i < position - 1; i++)
@@ -422,24 +428,24 @@ int deleteAtPosition(linkedList *l, int position)
     free(toDelete);
 
     // decrement the length due to deletion and return the data of the deleted element.
-    l->length--;
+    myList->length--;
     return data;
 }
 
 // function to search a key and return the address of the Node(pointer)
 /*This function's return value is intentionaly made Node pointer since it makes easier for the deleteByKey function easier. and it can
 be even made as a message printing function or returning true(1) or false(0) functions too.*/
-Node *searchByKey(linkedList *l, int key)
+Node *searchByKey(linkedList *myList, int key)
 {
     // check whether the list is empty.
-    if (isEmpty(l))
+    if (isEmpty(myList))
     {
         printf("No elements to search..\n");
         return NULL;
     }
 
     // pointer to traverse.
-    Node *temp = l->head->next;
+    Node *temp = myList->head->next;
     // along traversing check whether the elements data matches key.
     while (temp)
     {
@@ -457,10 +463,10 @@ Node *searchByKey(linkedList *l, int key)
 }
 
 // function to delete a element by having a key.
-int deleteByKey(linkedList *l, int key)
+int deleteByKey(linkedList *myList, int key)
 {
     // get the Node from the searchByKey()
-    Node *toDelete = searchByKey(l, key);
+    Node *toDelete = searchByKey(myList, key);
 
     // check if it is null it is either the element is empty or
     // the element is not found then print and return correspondingly.
@@ -471,14 +477,14 @@ int deleteByKey(linkedList *l, int key)
     }
 
     // check the deletion conditions.
-    if (toDelete == l->head->next)
+    if (toDelete == myList->head->next)
     {
         // if it is head then just make the next element as head.
-        l->head->next = toDelete->next;
+        myList->head->next = toDelete->next;
     }
     else
     {
-        Node *temp = l->head->next;
+        Node *temp = myList->head->next;
 
         // if it isn't the head, then traverse until the next element is toDelete (key containing element) or previous element to toDelete.
         while (temp && temp->next != toDelete)
@@ -497,9 +503,9 @@ int deleteByKey(linkedList *l, int key)
 }
 
 // function to check whether the linkedlist is sorted or not.
-int isSorted(linkedList *l)
+int isSorted(linkedList *myList)
 {
-    Node *temp = l->head->next;
+    Node *temp = myList->head->next;
 
     // track the prev and next elements along checking whether they are sorted.
     while (temp && temp->next)
@@ -517,33 +523,23 @@ int isSorted(linkedList *l)
 /*creation of linkedlist using this function must be a sorted list initally,
 else the code doesn't work, it do work but operation will not be as intended.*/
 // function to create ordered list. (acsending/sorted order).
-void createOrderedList(linkedList *l, int data)
+void createOrderedList(linkedList *myList, int data)
 {
-    // create a new Node and check whether the memory allocation is done or not.
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    //(newNode == NULL) this is the condition.
-    if (!newNode)
-    {
-        printf("Memory allocation failed.\n");
-        return;
-    }
+    Node* newNode = createNode(data);
 
     // ensure the linkedlist is sorted.
-    if (isSorted(l))
+    if (isSorted(myList))
     {
 
         // base case, where the length is 0 or the data is the least then insert at head.
-        if (l->length == 0 || l->head->next->data >= data)
+        if (myList->length == 0 || myList->head->next->data >= data)
         {
-            insertAtHead(l, data);
+            insertAtHead(myList, data);
             return;
         }
 
-        // initalise new Node.
-        initNode(newNode, data);
-
         // using temp pointer slide through until you find the element which is lesser than the newNode's data.
-        Node *temp = l->head->next;
+        Node *temp = myList->head->next;
         while (temp->next && temp->next->data < newNode->data)
         {
             temp = temp->next;
@@ -554,7 +550,7 @@ void createOrderedList(linkedList *l, int data)
         temp->next = newNode;
 
         // increment the length of the linkedlist.
-        l->length++;
+        myList->length++;
     }
     else
     {
@@ -564,16 +560,16 @@ void createOrderedList(linkedList *l, int data)
 }
 
 // function to reverse a linkedlist.
-void reverse(linkedList *l)
+void reverse(linkedList *myList)
 {
 
-    if (isEmpty(l))
+    if (isEmpty(myList))
     {
         printf("No elements to reverse the linkedlist.\n");
         return;
     }
     // we have three pointers so as to manipulte the changes.
-    Node *currentNode = l->head->next;
+    Node *currentNode = myList->head->next;
     Node *previousNode = NULL;
     Node *nextNode; // this remains unintalised.
 
@@ -598,11 +594,11 @@ void reverse(linkedList *l)
     // this can be understood only with paperwork....
 
     // previousNode upon complete iteration becomes the new head.
-    l->head->next = previousNode;
+    myList->head->next = previousNode;
 }
 
 // function to create a copy of the linked list and return a new linkedlist.
-linkedList* copyList(linkedList *orginal)
+linkedList *copyList(linkedList *orginal)
 {
     linkedList *copy = initLinkedList(); // initalize the linkedlist.
 
@@ -618,13 +614,13 @@ linkedList* copyList(linkedList *orginal)
     return copy;
 }
 
-void display(linkedList *l)
+void display(linkedList *myList)
 {
-    Node *temp = l->head->next;
+    Node *temp = myList->head->next;
     // keeping a pointer to slide through the linkedlist.
 
     // checking whether the linkedlist is empty or not.
-    if (isEmpty(l))
+    if (isEmpty(myList))
     {
         printf("No elements to display..\n");
         return;
