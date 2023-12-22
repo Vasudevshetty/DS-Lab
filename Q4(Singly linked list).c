@@ -111,13 +111,13 @@ int main()
         case 1:
             printf("Enter data to insert at front: ");
             scanf("%d", &data);
-            insertAtHead(&l, data);
+            insertAtHead(l, data);
             display(l);
             break;
         case 2:
             printf("Enter data to insert at rear: ");
             scanf("%d", &data);
-            insertAtRear(&l, data);
+            insertAtRear(l, data);
             display(l);
             break;
         case 3:
@@ -125,7 +125,7 @@ int main()
             scanf("%d", &data);
             printf("Enter position to insert at: ");
             scanf("%d", &position);
-            insertAtPosition(&l, data, position);
+            insertAtPosition(l, data, position);
             display(l);
             break;
         case 4:
@@ -139,25 +139,25 @@ int main()
         case 6:
             printf("Enter position to delete: ");
             scanf("%d", &position);
-            deleteAtPosition(&l, position);
+            deleteAtPosition(l, position);
             display(l);
             break;
         case 7:
             printf("Enter key to delete: ");
             scanf("%d", &key);
-            deleteByKey(&l, key);
+            deleteByKey(l, key);
             display(l);
             break;
         case 8:
             printf("Enter key to search: ");
             scanf("%d", &key);
-            searchByKey(&l, key);
+            searchByKey(l, key);
             display(l);
             break;
         case 9:
             printf("Enter data to insert in the ordered list: ");
             scanf("%d", &data);
-            createOrderedList(&l, data);
+            createOrderedList(l, data);
             display(l);
             break;
         case 10:
@@ -353,10 +353,7 @@ int deleteAtRear(linkedList *l)
     // base case .. if the length = 1 or only head makes the entire linkedlist.
     if (l->length == 1)
     {
-        int data = l->head->next->data;
-        free(l->head->next);
-        initLinkedList(l);
-        return data;
+        return deleteAtHead(l);
     }
 
     // pointer to find the last element.
