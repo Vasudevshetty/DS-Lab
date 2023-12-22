@@ -40,7 +40,7 @@ int isSorted(linkedList *l);
 // initalisation functions for Node and linkedlist.
 Node *createNode(int data);
 void initNode(Node *Node, int data);
-void initLinkedList(linkedList *l);
+linkedList* initLinkedList();
 
 // Insertion functions.
 void insertAtHead(linkedList *l, int data);
@@ -78,8 +78,7 @@ void destructLinkedList(linkedList *l){
 
 int main()
 {
-    linkedList l;
-    initLinkedList(&l);
+    linkedList *l = initLinkedList();
     linkedList *copy;
     int choice, data, position, key;
 
@@ -113,13 +112,13 @@ int main()
             printf("Enter data to insert at front: ");
             scanf("%d", &data);
             insertAtHead(&l, data);
-            display(&l);
+            display(l);
             break;
         case 2:
             printf("Enter data to insert at rear: ");
             scanf("%d", &data);
             insertAtRear(&l, data);
-            display(&l);
+            display(l);
             break;
         case 3:
             printf("Enter data to insert: ");
@@ -127,53 +126,53 @@ int main()
             printf("Enter position to insert at: ");
             scanf("%d", &position);
             insertAtPosition(&l, data, position);
-            display(&l);
+            display(l);
             break;
         case 4:
-            deleteAtHead(&l);
-            display(&l);
+            deleteAtHead(l);
+            display(l);
             break;
         case 5:
-            deleteAtRear(&l);
-            display(&l);
+            deleteAtRear(l);
+            display(l);
             break;
         case 6:
             printf("Enter position to delete: ");
             scanf("%d", &position);
             deleteAtPosition(&l, position);
-            display(&l);
+            display(l);
             break;
         case 7:
             printf("Enter key to delete: ");
             scanf("%d", &key);
             deleteByKey(&l, key);
-            display(&l);
+            display(l);
             break;
         case 8:
             printf("Enter key to search: ");
             scanf("%d", &key);
             searchByKey(&l, key);
-            display(&l);
+            display(l);
             break;
         case 9:
             printf("Enter data to insert in the ordered list: ");
             scanf("%d", &data);
             createOrderedList(&l, data);
-            display(&l);
+            display(l);
             break;
         case 10:
-            reverse(&l);
+            reverse(l);
             printf("Reversed list is,\n");
-            display(&l);
+            display(l);
             break;
         case 11:
-            copy = copyList(&l);
-            display(&l);
+            copy = copyList(l);
+            display(l);
             printf("Copied list is,\n");
             display(copy);
             break;
         case 12:
-            display(&l);
+            display(l);
             break;
         case 13:
             printf("Exiting the program.\n");
@@ -185,8 +184,8 @@ int main()
     } while (choice != 13);
     
     //deallocate the memmory for the list.
-    destructLinkedList(&l);
-    free(&l);
+    destructLinkedList(l);
+    free(l);
 
     return 0;
 }
@@ -215,8 +214,13 @@ void initNode(Node *node, int data)
 }
 
 // function to initalise the linkedlist with null and length zero instead of garbage dump.
-void initLinkedList(linkedList *l)
+linkedList* initLinkedList()
 {
+    linkedList *l = (linkedList*) malloc (sizeof(linkedList));
+    if(!l){
+        printf("Memory allcocation failed.\n");
+        exit(1);
+    }
     // default head for further purpose.
     l->head = createNode(0);
     l->length = 0;
@@ -602,8 +606,7 @@ void reverse(linkedList *l)
 // function to create a copy of the linked list and return a new linkedlist.
 linkedList* copyList(linkedList *orginal)
 {
-    linkedList *copy = (linkedList*)malloc(sizeof(linkedList));       // create a copy linkedlist.
-    initLinkedList(copy); // initalize the linkedlist.
+    linkedList *copy = initLinkedList(); // initalize the linkedlist.
 
     // traverse the orginal list and insert elements into the copy.
     Node *temp = orginal->head->next;
