@@ -224,6 +224,7 @@ linkedList* initLinkedList()
     // default head for further purpose.
     l->head = createNode(0);
     l->length = 0;
+    return l;
 }
 
 // function to insert at head of the linkedlist(first Node.).
