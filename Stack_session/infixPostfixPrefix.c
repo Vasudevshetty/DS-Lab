@@ -225,8 +225,8 @@ int postfixEvaluate(const char *postfix)
             push(stack, token - '0');
         else if (isOperator(token))
         {
+            operand2 = pop(stack); 
             operand1 = pop(stack);
-            operand2 = pop(stack);
             switch (token)
             {
             case '+':
