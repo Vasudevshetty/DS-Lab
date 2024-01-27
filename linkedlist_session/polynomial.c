@@ -20,20 +20,26 @@ typedef struct
     int degree;
 } polynomial;
 
-Term* createTerm(int coeff, int exp);
-node* createNode(Term* term);
-polynomial* initPolynomial();
+Term *createTerm(int coeff, int exp);
+node *createNode(Term *term);
+polynomial *initPolynomial();
 
-polynomial* add(polynomial *poly1, polynomial *poly2);
-void insert(polynomial* poly, Term* term);
+polynomial *add(polynomial *poly1, polynomial *poly2);
+void insert(polynomial *poly, Term *term);
+void createPolynomial(polynomial *poly);
+void destructList(polynomial *poly);
+void display(polynomial *poly);
 
 int main()
 {
     polynomial *poly = initPolynomial();
     int coeff, exp, choice;
+    polynomial *poly1 = initPolynomial();
+    polynomial *poly2 = initPolynomial();
+    polynomial *sum = initPolynomial();
     do
     {
-        printf("Menu.\n1. Insert.\n2. Display.\n3. Exit\n");
+        printf("Menu.\n1. Insert.\n2. Display.\n3. Add\n4. Exit\n");
         printf("Enter choice : ");
         scanf("%d", &choice);
         switch (choice)
@@ -50,25 +56,26 @@ int main()
             display(poly);
             break;
         case 3:
+            createPolynomial(poly1);
+            createPolynomial(poly2);
+            sum = add(poly1, poly2);
+            display(sum);
+            destructList(poly1);
+            destructList(poly2);
+            destructList(sum);
+            break;
+        case 4:
             printf("Exiting....\n");
+            destructList(poly);
             break;
         default:
             printf("Invalid choice... please try again..\n");
         }
         printf("\n\n");
-    } while (choice != 3);
-    polynomial* poly1 = initPolynomial();
-    polynomial* poly2 = initPolynomial();
+    } while (choice != 4);
 
-    createPolynomial(poly1);
-    createPolynomial(poly2);
-
-    poly = add(poly1, poly2);
-
-    display(poly);
     return 0;
 }
-
 
 Term *createTerm(int coeff, int exp)
 {
@@ -235,16 +242,17 @@ polynomial *add(polynomial *poly1, polynomial *poly2)
     return poly;
 }
 
-void createPolynomial(polynomial* poly){
+void createPolynomial(polynomial *poly)
+{
     int terms;
     printf("Enter the no of terms: ");
     scanf("%d", &terms);
 
-    for(int i = 0; i < terms; i++){
+    for (int i = 0; i < terms; i++)
+    {
         int coeff, exp;
         printf("Enter the coeff and exp of the term : ");
         scanf("%d %d", &coeff, &exp);
         insert(poly, createTerm(coeff, exp));
     }
 }
-
