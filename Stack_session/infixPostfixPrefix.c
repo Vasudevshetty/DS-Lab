@@ -214,50 +214,11 @@ bool isOperator(char c)
     return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
 }
 
-int postfixEvaluate(const char *postfix)
-{
-    int i = 0, operand1, operand2, result;
-    Stack *stack = createStack();
-    while (postfix[i] != '\0')
-    {
-        char token = postfix[i];
-        if (isDigit(token))
-            push(stack, token - '0');
-        else if (isOperator(token))
-        {
-            operand2 = pop(stack); 
-            operand1 = pop(stack);
-            switch (token)
-            {
-            case '+':
-                result = operand1 + operand2;
-                break;
-            case '-':
-                result = operand1 - operand2;
-                break;
-            case '*':
-                result = operand1 * operand2;
-                break;
-            case '/':
-                result = operand1 / operand2;
-                break;
-            case '^':
-                result = operand1 ^ operand2;
-                break;
-            }
-            push(stack, result);
-        }
-        i++;
-    }
-        return pop(stack);
-}
-
 int main()
 {
     char infix[100];
     scanf("%s", infix);
     printf("%s, %s", infixToPostfix(infix), infixToPrefix(infix));
     printf("\n");
-    printf("%d", postfixEvaluate(infixToPostfix(infix)));
     return 0;
 }
