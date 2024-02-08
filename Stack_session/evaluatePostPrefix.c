@@ -137,10 +137,29 @@ int evualate(const char *expression, Notation notation)
 // driver code.
 int main()
 {
-    char s[10], su[10];
-    scanf("%s", s);
-    printf("%d\n", evualate(s, prefix));
-    scanf("%s", su);
-    printf("%d\n", evualate(su, postfix));
+    char expression[100];
+    int choice, result;
+    char notation[10];
+    printf("Enter the expression to calcualte : ");
+    scanf("%s", expression);
+    printf("Please enter the type of notation used in the expression : ");
+    scanf("%s", notation);
+    if(strcmp(notation, "prefix") == 0)
+        result = evualate(expression, prefix);
+    else if(strcmp(notation, "postfix") == 0)
+        result = evualate(expression, postfix);
+    else {
+        printf("Please specify the correct type of notation (prefix or postfix).\n");
+        main();
+    }
+    printf("The calcualted result of the expression is %d\n", result);
+    printf("\n1. Try again\t 2. Exit.\n");
+    printf("Enter choice: ");
+    scanf("%d", &choice);
+    printf("\n\n");
+    if(choice == 1)
+        main();
+    else
+        printf("Exiting....\n");
     return 0;
 }
