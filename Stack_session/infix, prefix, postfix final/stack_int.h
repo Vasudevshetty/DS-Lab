@@ -1,5 +1,5 @@
-#ifndef stack_dynamic
-#define stack_dynamic 
+#ifndef stack_int
+#define stack_int
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -7,7 +7,7 @@
 
 typedef struct Node
 {
-    char data;
+    int data;
     struct Node *next;
 } node;
 
@@ -20,7 +20,7 @@ typedef struct
 #define top stack->Top
 #define count stack->Count
 
-node *createNode(char data)
+node *createNodeInt(int data)
 {
     node *newNode = (node *)malloc(sizeof(node));
     if (!newNode)
@@ -33,7 +33,7 @@ node *createNode(char data)
     return newNode;
 }
 
-Stack *createStack()
+Stack *createStackInt()
 {
     Stack *stack = (Stack *)malloc(sizeof(Stack));
     if (!stack)
@@ -46,15 +46,15 @@ Stack *createStack()
     return stack;
 }
 
-bool isEmpty(Stack *stack)
+bool isEmptyInt(Stack *stack)
 {
     return !(top && count);
 }
 
-void push(Stack *stack, char data)
+void pushInt(Stack *stack, char data)
 {
-    node *newNode = createNode(data);
-    if (isEmpty(stack))
+    node *newNode = createNodeInt(data);
+    if (isEmptyInt(stack))
         top = newNode;
     else
     {
@@ -64,29 +64,29 @@ void push(Stack *stack, char data)
     count++;
 }
 
-char pop(Stack *stack)
+int popInt(Stack *stack)
 {
-    if (isEmpty(stack))
+    if (isEmptyInt(stack))
     {
         printf("Stack under flow, popping failed.\n");
         return -1;
     }
     node *toDelete = top;
-    char data = toDelete->data;
+    int data = toDelete->data;
     top = toDelete->next;
     free(toDelete);
     count--;
     return data;
 }
 
-char peek(Stack *stack)
+int peekInt(Stack *stack)
 {
-    return isEmpty(stack) ? -1 : top->data;
+    return isEmptyInt(stack) ? -1 : top->data;
 }
 
-void display(Stack *stack)
+void displayInt(Stack *stack)
 {
-    if (isEmpty(stack))
+    if (isEmptyInt(stack))
     {
         printf("No elements to display.\n");
         return;
@@ -95,7 +95,7 @@ void display(Stack *stack)
     printf("The elements of the stack are, \n");
     while (temp)
     {
-        printf("%c ", temp->data);
+        printf("%d ", temp->data);
         temp = temp->next;
     }
     printf("\n");
