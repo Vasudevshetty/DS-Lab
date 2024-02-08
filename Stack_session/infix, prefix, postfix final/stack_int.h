@@ -5,24 +5,24 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-typedef struct Node
+typedef struct NodeInt
 {
     int data;
-    struct Node *next;
-} node;
+    struct NodeInt *next;
+} nodeInt;
 
 typedef struct
 {
-    node *Top;
+    nodeInt *Top;
     int Count;
-} Stack;
+} StackInt;
 
-#define top stack->Top
-#define count stack->Count
+#define topInt stackInt->Top
+#define countInt stackInt->Count
 
-node *createNodeInt(int data)
+nodeInt *createNodeInt(int data)
 {
-    node *newNode = (node *)malloc(sizeof(node));
+    nodeInt *newNode = (nodeInt *)malloc(sizeof(nodeInt));
     if (!newNode)
     {
         printf("Memory allcation failed.\n");
@@ -33,65 +33,65 @@ node *createNodeInt(int data)
     return newNode;
 }
 
-Stack *createStackInt()
+StackInt *createStackInt()
 {
-    Stack *stack = (Stack *)malloc(sizeof(Stack));
-    if (!stack)
+    StackInt *stackInt = (StackInt *)malloc(sizeof(StackInt));
+    if (!stackInt)
     {
         printf("Memmory allocaiton failed.\n");
         exit(1);
     }
-    top = NULL;
-    count = 0;
-    return stack;
+    topInt = NULL;
+    countInt = 0;
+    return stackInt;
 }
 
-bool isEmptyInt(Stack *stack)
+bool isEmptyInt(StackInt *stackInt)
 {
-    return !(top && count);
+    return !(topInt && countInt);
 }
 
-void pushInt(Stack *stack, char data)
+void pushInt(StackInt *stackInt, char data)
 {
-    node *newNode = createNodeInt(data);
-    if (isEmptyInt(stack))
-        top = newNode;
+    nodeInt *newNode = createNodeInt(data);
+    if (isEmptyInt(stackInt))
+        topInt = newNode;
     else
     {
-        newNode->next = top;
-        top = newNode;
+        newNode->next = topInt;
+        topInt = newNode;
     }
-    count++;
+    countInt++;
 }
 
-int popInt(Stack *stack)
+int popInt(StackInt *stackInt)
 {
-    if (isEmptyInt(stack))
+    if (isEmptyInt(stackInt))
     {
         printf("Stack under flow, popping failed.\n");
         return -1;
     }
-    node *toDelete = top;
+    nodeInt *toDelete = topInt;
     int data = toDelete->data;
-    top = toDelete->next;
+    topInt = toDelete->next;
     free(toDelete);
-    count--;
+    countInt--;
     return data;
 }
 
-int peekInt(Stack *stack)
+int peekInt(StackInt *stackInt)
 {
-    return isEmptyInt(stack) ? -1 : top->data;
+    return isEmptyInt(stackInt) ? -1 : topInt->data;
 }
 
-void displayInt(Stack *stack)
+void displayInt(StackInt *stackInt)
 {
-    if (isEmptyInt(stack))
+    if (isEmptyInt(stackInt))
     {
         printf("No elements to display.\n");
         return;
     }
-    node *temp = top;
+    nodeInt *temp = topInt;
     printf("The elements of the stack are, \n");
     while (temp)
     {
