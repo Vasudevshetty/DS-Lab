@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 
+// enum to find out the notation.
 typedef enum Notation
 {
     prefix,
@@ -87,7 +88,9 @@ int peek(Stack *stack)
 {
     return isEmpty(stack) ? -1 : top->data;
 }
+// the above is the stack implementation using linkedlist.
 
+// the support fnction to calcuate the value of teh oeprations of operands speciefed,
 int calculate(char operator, int operand1, int operand2)
 {
     switch (operator)
@@ -109,6 +112,8 @@ bool isOperator(char c)
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
+// the function to evalute the expression based on the noatation the expression is followed, used dry principle to finish everything
+// in a single function.
 int evualate(const char *expression, Notation notation)
 {
     Stack *stack = initStack();
@@ -129,6 +134,7 @@ int evualate(const char *expression, Notation notation)
     return pop(stack);
 }
 
+// driver code.
 int main()
 {
     char s[10], su[10];
