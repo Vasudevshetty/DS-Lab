@@ -77,7 +77,7 @@ char *convert(const char *expression, Notation notation)
             push(stack, token);
         else if (notation == prefix ? token == '(' : token == ')')
         {
-            while (!isEmpty(stack) && (notation == prefix ? token != '(' : token != ')'))
+            while (!isEmpty(stack) && (notation == prefix ? peek(stack) != ')' : peek(stack) != '('))
                 result[j++] = pop(stack);
             pop(stack);
         }
@@ -92,10 +92,14 @@ char *convert(const char *expression, Notation notation)
     }
     while(!isEmpty(stack))
         result[j++] = pop(stack);
-    result[j] = '/0';
+    result[j] = '\0';
     return notation == prefix ? reverse(result) : result;
 }
 
 int main(){
-    
+    char s[10];
+    scanf("%s", s);
+    printf("%s\n", convert(s, prefix));
+    printf("%s\n", convert(s, postfix));
+    return 0;
 }
