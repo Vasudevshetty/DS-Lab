@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "stack_dynamic.h"
+#include "stack_int.h"
 
 int precedence(char c)
 {
@@ -48,8 +49,10 @@ typedef enum
     postfix,
 } Notation;
 
-char* reverse(char* expression){
-    for (int i = 0, j = strlen(expression) - 1; i < j; i++, j--){
+char *reverse(char *expression)
+{
+    for (int i = 0, j = strlen(expression) - 1; i < j; i++, j--)
+    {
         char temp = expression[i];
         expression[i] = expression[j];
         expression[j] = temp;
@@ -90,16 +93,38 @@ char *convert(const char *expression, Notation notation)
         }
         i++;
     }
-    while(!isEmpty(stack))
+    while (!isEmpty(stack))
         result[j++] = pop(stack);
     result[j] = '\0';
     return notation == prefix ? reverse(result) : result;
 }
 
-int main(){
+int evaluate(const char* expression, Notation notation){
+    StackInt *stack = createStackInt();
+    int i = 0, len = strlen(expression);
+    while(i < len){
+        char token = notation == prefix ? expression[len - i - 1] : expression[i];
+        if(isOperand(token))
+            pushInt(stack, token - '0');
+        else if(isOperator(token)){
+            int operand1 = popInt(stack);
+            int operand2 = popInt(stack);
+            int result = notation == prefix ? calculate(token, operand1, operand2) : calculate(token, operand2, operand1);
+            pushInt(stack, result);
+        }
+        i++;
+    }
+    return peekInt(stack);
+}
+
+int main()
+{
     char s[10];
     scanf("%s", s);
     printf("%s\n", convert(s, prefix));
     printf("%s\n", convert(s, postfix));
+    char *r = convert(s, prefix);
+    char *rs = convert(s, postfix);
+    printf("%d %d\n", evaluate(r, prefix), evaluate(rs, postfix));
     return 0;
 }
