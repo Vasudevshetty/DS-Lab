@@ -99,14 +99,17 @@ char *convert(const char *expression, Notation notation)
     return notation == prefix ? reverse(result) : result;
 }
 
-int evaluate(const char* expression, Notation notation){
+int evaluate(const char *expression, Notation notation)
+{
     StackInt *stack = createStackInt();
     int i = 0, len = strlen(expression);
-    while(i < len){
+    while (i < len)
+    {
         char token = notation == prefix ? expression[len - i - 1] : expression[i];
-        if(isOperand(token))
+        if (isOperand(token))
             pushInt(stack, token - '0');
-        else if(isOperator(token)){
+        else if (isOperator(token))
+        {
             int operand1 = popInt(stack);
             int operand2 = popInt(stack);
             int result = notation == prefix ? calculate(token, operand1, operand2) : calculate(token, operand2, operand1);
@@ -119,12 +122,48 @@ int evaluate(const char* expression, Notation notation){
 
 int main()
 {
-    char s[10];
-    scanf("%s", s);
-    printf("%s\n", convert(s, prefix));
-    printf("%s\n", convert(s, postfix));
-    char *r = convert(s, prefix);
-    char *rs = convert(s, postfix);
-    printf("%d %d\n", evaluate(r, prefix), evaluate(rs, postfix));
+    char expression[100];
+    int choice;
+    do
+    {
+        printf("Enter the expresssion to operate : ");
+        scanf("%s", expression);
+        printf("Menu.\n1. Convert.\n2. Evaluate.\n3. Exit\n\n");
+        printf("Enter choice : ");
+        scanf("%d", &choice);
+        int iChoice;
+        switch (choice)
+        {
+        case 1:
+            printf("Menu.\n1. Postfix\n2. Prefix\n");
+            printf("Enter choice : ");
+            scanf("%d", &iChoice);
+            switch (iChoice)
+            {
+            case 1:
+                printf("The postfix converted expression is : %s\n", convert(expression, postfix));
+                break;
+            case 2:
+                printf("The postfix converted expression is : %s\n", convert(expression, prefix));
+                break;
+            }
+            break;
+        case 2:
+            printf("Mention the type of the notation(prefix/postfix) (string) : ");
+            char notation[10];
+            scanf("%s", notation);
+            printf("The evulated result of the %s expression is %d\n",
+                   notation, evaluate(convert(expression, strcmp(notation, "postfix") ? postfix : prefix),
+                    strcmp(notation, "postfix") ? postfix : prefix));
+            break;
+        case 3:
+            printf("Exiting....\n");
+            break;
+        default:
+            printf("Please input valid choice only...\n");
+        }
+        printf("\n\n");
+    } while (choice != 3);
+
     return 0;
 }
