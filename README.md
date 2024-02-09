@@ -4,7 +4,7 @@ Explore my solutions and implementations for various data structures lab questio
 
 # Table of Contents
 
-    JSSSTU 3rd Sem, DS-LAB (22CS36L)
+JSSSTU 3rd Sem, DS-LAB (22CS36L)
 
 ## Quick links 🔗
 
@@ -95,9 +95,13 @@ Explore my solutions and implementations for various data structures lab questio
 - **`struct_session/`**: Sessions focusing on the usage of structures.
 - **`Trees and graphs/`**: Implementations and problem-solving for trees and graphs.
 
-## 🚀 Usage
+## 🧑‍💻 Getting Started
 
-Feel free to use this code as a reference for your lab assignments and understanding of data structures and algorithms.
+1. Clone the repository:
+   ```bash
+      git clone https://github.com/Vasudevshetty/Java-OOPS.git
+   ```
+Feel free to use this code as a reference for your lab assignments and understanding of data structures..
 
 If liked the repo, please put up a star. 😍💥
 
