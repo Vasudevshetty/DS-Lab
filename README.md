@@ -66,7 +66,6 @@ Explore my solutions and implementations for various data structures lab questio
      - Create a copy of the list.
 
 8. [Stack Operations](https://github.com/Vasudevshetty/DS-Lab/tree/main/Stack_session/Stack%20Operations)
-   https://github.com/Vasudevshetty/DS-Lab/blob/main/Queue_session/Q12(Priority%20queue).c
 
    - Implement a stack with static and dynamic memory allocation mechanisms using a structure.
 
