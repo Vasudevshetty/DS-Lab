@@ -4,8 +4,8 @@ Explore my solutions and implementations for various data structures lab questio
 
 # Table of Contents
 
-JSSSTU 3rd Sem, DS-LAB (22CS36L)
 
+JSSSTU 3rd Sem, DS-LAB (22CS36L)
 ## Quick links 🔗
 
 1. [Pointer Demonstrations](https://github.com/Vasudevshetty/DS-Lab/tree/main/pointers_session)
