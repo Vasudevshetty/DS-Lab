@@ -77,9 +77,9 @@ JSSSTU 3rd Sem, DS-LAB (22CS36L)
 
     - Implement ordinary, circular, and double-ended queues with static and dynamic memory allocation.
 
-11. [Priority Queue Operations](<https://github.com/Vasudevshetty/DS-Lab/blob/main/Queue_session/Q12(Priority%20queue).c>)
+11. [Priority Queue Operations](https://github.com/Vasudevshetty/DS-Lab/tree/main/Queue_session/priority_queue)
 
-    - Implement a priority queue with static and dynamic memory allocation.
+    - Implement a priority queue with static and dynamic memory allocation with two design(ENQUEUE and DEQUEUE manipualated).
 
 12. [Binary Search Tree and Graph Operations](https://github.com/Vasudevshetty/DS-Lab/tree/main/Trees%20and%20graphs)
     - Implement binary search trees and graph traversal techniques.
