@@ -6,6 +6,12 @@ structure)*/
 #include <stdlib.h>
 #include <stdbool.h>
 
+/*This is desing 1 of the prioty queue where we manipulate the DEQUEUE operation of the regualr queue operations,
+where we search for the highest priority element and dequeue it, The time it takes for this operation is nearly linear time.
+O(n). (can be upgraded to O(logn) by using binary heap or heapify.).
+Desing 2 will be added in one more subdivision.*/
+
+
 #define MAX_SIZE 100
 typedef struct
 {
@@ -13,7 +19,11 @@ typedef struct
     int priority;
 } Element;
 
+// default value to return when we won't find any element.
 Element defaultElement = {0, 0};
+
+
+// this is a asceding type of priorty queue.
 typedef struct
 {
     Element *elements;
@@ -23,11 +33,13 @@ typedef struct
     int Size;
 } priorityQueue;
 
+// macros for easier access.
 #define ele que->elements
 #define front que->Front
 #define rear que->Rear
 #define size que->Size
 
+// utility function to create a priorty queue with initailsation in heap.
 priorityQueue *createPriorityQueue(int sz)
 {
     priorityQueue *que = (priorityQueue *)malloc(sizeof(priorityQueue));
@@ -48,6 +60,7 @@ priorityQueue *createPriorityQueue(int sz)
     return que;
 }
 
+//support functions.
 bool isEmpty(priorityQueue *que)
 {
     return front == -1;
@@ -57,6 +70,12 @@ bool isFull(priorityQueue *que)
 {
     return rear == size - 1;
 }
+
+/*The functions dequeue, enqueue, peek front and rear accepts and returns the copy of the element, 
+this is also a way, which is not the optimised as we pass as a pointer, since element is a  samll structure, copying indeeed
+is easier. The other way passing and accepting element as pointer will be demonstrated on the dynamic implmentation of the 
+priority queue in the next subdivision. */
+
 
 void enqueue(priorityQueue *que, Element element)
 {
@@ -81,6 +100,7 @@ Element dequeue(priorityQueue *que)
     }
     int min = ele[front].priority;
     int idx = front;
+    // find the min of the priority (i.e highest priority)
     for (int i = front + 1; i <= rear; i++){
         if(ele[i].priority < min){
             min = ele[i].priority;
@@ -113,6 +133,7 @@ void display(priorityQueue* que){
     }
 }
 
+//drive code.
 int main(){
     int sz;
     printf("Enter size of the queue : ");
