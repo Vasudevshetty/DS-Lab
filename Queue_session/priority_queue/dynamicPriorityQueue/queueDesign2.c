@@ -1,15 +1,20 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
-typedef struct{
+// element type to be generic as possible.
+typedef struct
+{
     int data;
     int priority;
 } Element;
 
-Element* createElement(int data, int priority){
+// utiilty class to create a element
+Element *createElement(int data, int priority)
+{
     Element *element = (Element *)malloc(sizeof(Element));
-    if(!element){
+    if (!element)
+    {
         printf("Memory allocation failed.\n");
         return NULL;
     }
@@ -17,14 +22,17 @@ Element* createElement(int data, int priority){
     element->priority = priority;
     return element;
 }
-typedef struct Node{
-    Element* element;
+typedef struct Node
+{
+    Element *element;
     struct Node *next;
 } node;
 
-node* createNode(Element* element){
+node *createNode(Element *element)
+{
     node *newNode = (node *)malloc(sizeof(node));
-    if(!newNode){
+    if (!newNode)
+    {
         printf("Memory allocation failed.\n");
         exit(1);
     }
@@ -32,19 +40,24 @@ node* createNode(Element* element){
     newNode->next = NULL;
     return newNode;
 }
-typedef struct{
+typedef struct
+{
     node *Front;
     node *Rear;
     int Count;
 } priorityQueue;
 
+// macros fro front and rear of list.
 #define front que->Front
 #define rear que->Rear
 #define count que->Count
 
-priorityQueue* createQueue(){
+// utility class to create a queue.
+priorityQueue *createQueue()
+{
     priorityQueue *que = (priorityQueue *)malloc(sizeof(priorityQueue));
-    if(!que){
+    if (!que)
+    {
         printf("Memory allocation failed.\n");
         exit(1);
     }
@@ -53,23 +66,33 @@ priorityQueue* createQueue(){
     return que;
 }
 
-bool isEmpty(priorityQueue* que){
+bool isEmpty(priorityQueue *que)
+{
     return !(front && rear && count);
 }
 
-void enqueue(priorityQueue* que, Element* element){
+// the enqueue manipulated design2, the time taken is O(n) linear time. i.e we insert in order .
+void enqueue(priorityQueue *que, Element *element)
+{
     node *newNode = createNode(element);
-    if(isEmpty(que)){
+    if (isEmpty(que))
+    {
         front = rear = newNode;
-    }else if(element->priority < front->element->priority){
+    }
+    else if (element->priority < front->element->priority)
+    {
         newNode->next = front;
         front = newNode;
-    }else if(element->priority > rear->element->priority){
+    }
+    else if (element->priority > rear->element->priority)
+    {
         rear->next = newNode;
         rear = newNode;
-    }else{
+    }
+    else
+    {
         node *temp = front;
-        while(temp->next->element->priority < element->priority)
+        while (temp->next->element->priority < element->priority)
             temp = temp->next;
         newNode->next = temp->next;
         temp->next = newNode;
@@ -77,14 +100,16 @@ void enqueue(priorityQueue* que, Element* element){
     count++;
 }
 
-Element* dequeue(priorityQueue* que){
-    if(isEmpty(que)){
+Element *dequeue(priorityQueue *que)
+{
+    if (isEmpty(que))
+    {
         printf("Queue under flow, no elements to delete.\n");
         return NULL;
     }
     node *toDelete = front;
     Element *element = toDelete->element;
-    if(front == rear)
+    if (front == rear)
         front = rear = NULL;
     else
         front = front->next;
@@ -93,31 +118,39 @@ Element* dequeue(priorityQueue* que){
     return element;
 }
 
-Element* peekFront(priorityQueue* que){
+Element *peekFront(priorityQueue *que)
+{
     return isEmpty(que) ? NULL : front->element;
 }
 
-Element* peekRear(priorityQueue* que){
-    return isEmpty(que) ? NULL: rear->element;
+Element *peekRear(priorityQueue *que)
+{
+    return isEmpty(que) ? NULL : rear->element;
 }
 
-void display(priorityQueue* que){
-    if(isEmpty(que)){
+void display(priorityQueue *que)
+{
+    if (isEmpty(que))
+    {
         printf("Queue under flow, no elementst to display.\n");
         return;
     }
     node *temp = front;
     printf("The elements of the queue are, \n");
-    while(temp){
+    while (temp)
+    {
         printf("Element => data : %d\tpriority : %d\n", temp->element->data, temp->element->priority);
         temp = temp->next;
     }
 }
 
-void destructQueue(priorityQueue* que){
-    if(!isEmpty(que)){
+void destructQueue(priorityQueue *que)
+{
+    if (!isEmpty(que))
+    {
         node *temp = front;
-        while(temp){
+        while (temp)
+        {
             node *next = temp->next;
             free(temp->element);
             free(temp);
@@ -127,50 +160,52 @@ void destructQueue(priorityQueue* que){
     free(que);
 }
 
-int main(){
+// driver code.
+int main()
+{
     priorityQueue *que = createQueue();
     int data, priority;
     int choice;
 
-    do{
+    do
+    {
         printf("Menu.\n1. Enqueue.\n2. Dequeue.\n3. Front.\n4. Rear\n5. Display\n6. Exit\n\n");
         printf("Enter choice : ");
         scanf("%d", &choice);
         Element *element;
-        switch(choice){
-            case 1:
-                printf("Enter data and priority : ");
-                scanf("%d %d", &data, &priority);
-                element = createElement(data, priority);
-                enqueue(que, element);
-                display(que);
+        switch (choice)
+        {
+        case 1:
+            printf("Enter data and priority : ");
+            scanf("%d %d", &data, &priority);
+            element = createElement(data, priority);
+            enqueue(que, element);
+            display(que);
+            break;
+        case 2:
+            element = dequeue(que);
+            if (!element)
                 break;
-            case 2:
-                element = dequeue(que);
-                if(!element)
-                    break;
-                printf("The dequeued element's data is %d and priority is %d\n", element->data, element->priority);
-                free(element);
-                display(que);
-                break;
-            case 3: 
-                element = peekFront(que);
-                element ? printf("The front element's data is %d and priority is %d\n", element->data, element->priority) :
-                printf("Qeueue under flow, cannot peek.\n");
-                break;
-            case 4: 
-                element = peekRear(que);
-                element ? printf("The rear element's data is %d and priority is %d\n", element->data, element->priority) :
-                printf("Qeueue under flow, cannot peek.\n");
-                break;
-            case 5 :
-                display(que);
-                break;
-            case 6:
-                printf("Exiting...\n");
-                break;
-            default:
-                printf("Enter valid choice only, please try again.\n");
+            printf("The dequeued element's data is %d and priority is %d\n", element->data, element->priority);
+            free(element);
+            display(que);
+            break;
+        case 3:
+            element = peekFront(que);
+            element ? printf("The front element's data is %d and priority is %d\n", element->data, element->priority) : printf("Qeueue under flow, cannot peek.\n");
+            break;
+        case 4:
+            element = peekRear(que);
+            element ? printf("The rear element's data is %d and priority is %d\n", element->data, element->priority) : printf("Qeueue under flow, cannot peek.\n");
+            break;
+        case 5:
+            display(que);
+            break;
+        case 6:
+            printf("Exiting...\n");
+            break;
+        default:
+            printf("Enter valid choice only, please try again.\n");
         }
         printf("\n\n");
     } while (choice != 6);
