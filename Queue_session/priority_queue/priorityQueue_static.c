@@ -41,6 +41,7 @@ priorityQueue *createPriorityQueue(int sz)
     if (!ele)
     {
         printf("Memmory allocation failed.\n");
+        free(que);
         exit(1);
     }
     front = rear = -1;
@@ -89,6 +90,7 @@ Element dequeue(priorityQueue *que)
     Element element = ele[idx];
     for (int i = idx; i <= rear - 1; i++)
         ele[i] = ele[i + 1];
+    rear--;
     return element;
 }
 
@@ -111,3 +113,53 @@ void display(priorityQueue* que){
     }
 }
 
+int main(){
+    int sz;
+    printf("Enter size of the queue : ");
+    scanf("%d", &sz);
+    priorityQueue *que = createPriorityQueue(sz);
+    int data, priority;
+    int choice;
+
+    do{
+        printf("Menu.\n1. Enqueue.\n2. Dequeue.\n3. Front.\n4. Rear\n5. Display\n6. Exit\n\n");
+        printf("Enter choice : ");
+        scanf("%d", &choice);
+        Element element;
+        switch(choice){
+            case 1:
+                printf("Enter data and priority : ");
+                scanf("%d %d", &data, &priority);
+                element.data = data;
+                element.priority = priority;
+                enqueue(que, element);
+                display(que);
+                break;
+            case 2:
+                element = dequeue(que);
+                printf("The dequeued element's data is %d and priority is %d\n", element.data, element.priority);
+                display(que);
+                break;
+            case 3: 
+                element = peekFront(que);
+                printf("The front element's data is %d and priority is %d\n", element.data, element.priority);
+                break;
+            case 4: 
+                element = peekRear(que);
+                printf("The rear element's data is %d and priority is %d\n", element.data, element.priority);
+                break;
+            case 5 :
+                display(que);
+                break;
+            case 6:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Enter valid choice only, please try again.\n");
+        }
+        printf("\n\n");
+    } while (choice != 6);
+    free(ele);
+    free(que);
+    return 0;
+}
