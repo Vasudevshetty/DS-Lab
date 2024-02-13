@@ -81,8 +81,10 @@ JSSSTU 3rd Sem, DS-LAB (22CS36L)
 
     - Implement a priority queue with static and dynamic memory allocation with two design(ENQUEUE and DEQUEUE manipualated).
 
-12. [Binary Search Tree and Graph Operations](https://github.com/Vasudevshetty/DS-Lab/tree/main/Trees%20and%20graphs)
-    - Implement binary search trees and graph traversal techniques.
+12. [Binary Search Trees](https://github.com/Vasudevshetty/DS-Lab/tree/main/trees_session/)
+    - Implement binary search trees and graph traversal techniques
+13. [Graphs](https://github.com/Vasudevshetty/DS-Lab/tree/main/graphs_session/)
+    - Implement binary search trees and graph traversal techniques..
 
 ## 📁 Directory Structure and Code Organisation 🧑‍💻
 
@@ -93,7 +95,8 @@ JSSSTU 3rd Sem, DS-LAB (22CS36L)
 - **`recursion_session/`**: Recursive problem-solving sessions.
 - **`Stack_session/`**: Learn about stacks through interactive sessions.
 - **`struct_session/`**: Sessions focusing on the usage of structures.
-- **`Trees and graphs/`**: Implementations and problem-solving for trees and graphs.
+- **`trees_session/`**: Sessions on trees, binary, binary search trees.
+- **`graphs_session/`**: Programs for basic graphs implementation and traversal techniques.
 
 ## 🧑‍💻 Getting Started
 
