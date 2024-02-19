@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
-typedef struct TreeNode
+typedef struct treeNode
 {
     char Operator;
-    struct TreeNode *operand1;
-    struct TreeNode *operand2;
-} treeNode;
+    struct treeNode *operand1;
+    struct treeNode *operand2;
+} TreeNode;
 
-treeNode *initTreeNode(char Operator)
+TreeNode *initTreeNode(char Operator)
 {
-    treeNode *newNode = (treeNode *)malloc(sizeof(treeNode));
+    TreeNode *newNode = (TreeNode *)malloc(sizeof(TreeNode));
     if (!newNode)
     {
         printf("Memory allocaiton failed.\n");
@@ -22,15 +23,15 @@ treeNode *initTreeNode(char Operator)
     return newNode;
 }
 
-typedef struct StackNode
+typedef struct stackNode
 {
     TreeNode *expression;
-    StackNode *next;
-} stackNode;
+    struct stackNode *next;
+} StackNode;
 
-stackNode *initStackNode(TreeNode *expression)
+StackNode *initStackNode(TreeNode *expression)
 {
-    stackNode *newNode = (stackNode *)malloc(sizeof(stackNode));
+    StackNode *newNode = (StackNode *)malloc(sizeof(StackNode));
     if (!newNode)
     {
         printf("Memory allocation failed.\n");
@@ -42,7 +43,7 @@ stackNode *initStackNode(TreeNode *expression)
 }
 typedef struct
 {
-    stackNode *Top;
+    StackNode *Top;
     int Count;
 } Stack;
 
@@ -70,12 +71,12 @@ bool isEmpty(Stack *stack)
 
 void push(Stack *stack, TreeNode *expression)
 {
-    stackNode *newNode = initStackNode(expression);
+    StackNode *newNode = initStackNode(expression);
     if (isEmpty(stack))
         top = newNode;
     else
     {
-        top->next = newNode;
+        newNode->next = top;
         top = newNode;
     }
     count++;
@@ -88,16 +89,59 @@ TreeNode *pop(Stack *stack)
         printf("Stack underflow, cannot pop.\n");
         return NULL;
     }
-    stackNode *toDelete = top;
+    StackNode *toDelete = top;
     TreeNode *expression = toDelete->expression;
-    top = top->next;
-    free(toDelete->expression);
+    top = toDelete->next;
     free(toDelete);
     count--;
     return expression;
 }
 
-TreeNode* peek(Stack* stack){
+TreeNode *peek(Stack *stack)
+{
     return isEmpty(stack) ? NULL : top->expression;
 }
 
+bool isOperand(char c)
+{
+    return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+bool isOperator(char c)
+{
+    return c == '+' || c == '-' || c == '*' || c == '/';
+}
+
+TreeNode *constructExpressionTree(const char *postfix)
+{
+    int i = 0, len = strlen(postfix);
+    Stack *stack = initStack();
+    while (i < len)
+    {
+        char token = postfix[i];
+        if (isOperand(token))
+            push(stack, initTreeNode(token));
+        else if (isOperator(token))
+        {
+            TreeNode *operand2 = pop(stack);
+            TreeNode *operand1 = pop(stack);
+            TreeNode *expression = initTreeNode(token);
+
+            expression->operand2 = operand2;
+            expression->operand1 = operand1;
+
+            push(stack, expression);
+        }
+        i++;
+    }
+    return peek(stack);
+}
+
+void inOrder(TreeNode *root)
+{
+    if (!root)
+        return;
+    inOrder(root->operand1);
+    printf("%c ", root->Operator);
+    inOrder(root->operand2);
+}
