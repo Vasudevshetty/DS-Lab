@@ -193,6 +193,7 @@ int dequeueRear(dequeue* que){
     que->rear = toDelete->prev;
     que->rear->next = NULL;
     free(toDelete);
+    que->count--;
     return data;
 }
 
