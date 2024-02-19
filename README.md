@@ -69,7 +69,7 @@ JSSSTU 3rd Sem, DS-LAB (22CS36L)
 
    - Implement a stack with static and dynamic memory allocation mechanisms using a structure.
 
-9. [Expression Conversion and Evaluation](https://github.com/Vasudevshetty/DS-Lab/tree/main/Stack_session/Notaition-Converter)
+9. [Expression Conversion and Evaluation](https://github.com/Vasudevshetty/DS-Lab/blob/main/Stack_session/Notation-Converter/notationConvertor.c)
 
    - Convert infix expressions to postfix/prefix and evaluate them.
 
