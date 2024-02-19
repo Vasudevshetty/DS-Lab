@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 
+// the tree node structure to accomadate the ecxpression's oeprator and its operands (tree) childern
 typedef struct treeNode
 {
     char Operator;
@@ -23,6 +24,7 @@ TreeNode *initTreeNode(char Operator)
     return newNode;
 }
 
+// likned list impolmentation of stack where data filed is of type TreeNode.
 typedef struct stackNode
 {
     TreeNode *expression;
@@ -112,6 +114,15 @@ bool isOperator(char c)
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
+
+// the function is to construct a binary tree of expression, where the binary operands are the leaf of a parent operator.
+/*
+        (+)
+       /  \
+      a    b    i.e for a simle expression a+b
+
+*/
+// the function takes in a postfix expresion to represent the expression into a expresssion tree.
 TreeNode *constructExpressionTree(const char *postfix)
 {
     int i = 0, len = strlen(postfix);
@@ -137,6 +148,8 @@ TreeNode *constructExpressionTree(const char *postfix)
     return peek(stack);
 }
 
+// the inorder of the tree is nothing but the infix of the expresssion,
+// since it makes sense i use inorder to represent the expresiontree
 void inOrder(TreeNode *root)
 {
     if (!root)
@@ -145,3 +158,5 @@ void inOrder(TreeNode *root)
     printf("%c ", root->Operator);
     inOrder(root->operand2);
 }
+
+
