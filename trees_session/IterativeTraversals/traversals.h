@@ -51,10 +51,13 @@ void inOrder(binaryTree *tree)
     Stack *stack = initStack();
     while (temp || !isEmpty(stack))
     {
-        if(temp){
+        if (temp)
+        {
             push(stack, temp);
             temp = temp->leftChild;
-        }else{
+        }
+        else
+        {
             temp = pop(stack);
             printf("%d ", temp->data);
             temp = temp->rightChild;
@@ -63,16 +66,39 @@ void inOrder(binaryTree *tree)
     printf("\n");
 }
 
-void levelOrder(binaryTree* tree){
+void postOrder(binaryTree *tree)
+{
+    TreeNode *temp = tree->Root;
+    Stack *stack1 = initStack();
+    Stack *stack2 = initStack();
+
+    push(stack1, temp);
+    while (!isEmpty(stack1))
+    {
+        temp = pop(stack1);
+        push(stack2, temp);
+        if (temp->leftChild)
+            push(stack1, temp->leftChild);
+        if (temp->rightChild)
+            push(stack1, temp->rightChild);
+    }
+    while(!isEmpty(stack2))
+        printf("%d ", pop(stack2)->data);
+    printf("\n");
+}
+
+void levelOrder(binaryTree *tree)
+{
     TreeNode *temp = root;
     Queue *que = initQueue();
     enqueue(que, temp);
-    while(!isEmptyQueue(que)){
+    while (!isEmptyQueue(que))
+    {
         temp = dequeue(que);
         printf("%d ", temp->data);
-        if(temp->leftChild)
+        if (temp->leftChild)
             enqueue(que, temp->leftChild);
-        if(temp->rightChild)
+        if (temp->rightChild)
             enqueue(que, temp->rightChild);
     }
     printf("\n");
