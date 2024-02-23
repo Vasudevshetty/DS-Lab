@@ -1,6 +1,6 @@
+/*Here are the iterative solutions of the all the traverasls and count nodes and hiehgt function on binary*/
 #include <stdio.h>
 #include "utility.h"
-
 typedef struct
 {
     TreeNode *Root;
@@ -82,7 +82,7 @@ void postOrder(binaryTree *tree)
         if (temp->rightChild)
             push(stack1, temp->rightChild);
     }
-    while(!isEmpty(stack2))
+    while (!isEmpty(stack2))
         printf("%d ", pop(stack2)->data);
     printf("\n");
 }
@@ -102,4 +102,31 @@ void levelOrder(binaryTree *tree)
             enqueue(que, temp->rightChild);
     }
     printf("\n");
+}
+
+int calculateHeight(TreeNode *rootNode)
+{
+    if (!rootNode)
+        return -1;
+
+    int leftHeight = calculateHeight(rootNode->leftChild);
+    int rightHeight = calculateHeight(rootNode->rightChild);
+    return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
+}
+
+int getHeight(binaryTree *tree)
+{
+    height = calculateHeight(tree->Root);
+    return height;
+}       
+
+int calculateNodesCount(TreeNode* rootNode){
+    if(!rootNode)
+        return 0;
+    return calculateNodesCount(rootNode->rightChild) + calculateNodesCount(rootNode->leftChild) + 1;
+}
+
+int getNodesCount(binaryTree* tree){
+    nodesCount = calculateNodesCount(tree->Root);
+    return nodesCount;
 }
