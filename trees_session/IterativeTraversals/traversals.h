@@ -16,7 +16,8 @@ binaryTree *initBinaryTree()
         exit(1);
     }
     tree->Root = NULL;
-    tree->Height = tree->NodesCount = 0;
+    tree->Height = -1;
+    tree->NodesCount = 0;
     return tree;
 }
 
@@ -104,29 +105,3 @@ void levelOrder(binaryTree *tree)
     printf("\n");
 }
 
-int calculateHeight(TreeNode *rootNode)
-{
-    if (!rootNode)
-        return -1;
-
-    int leftHeight = calculateHeight(rootNode->leftChild);
-    int rightHeight = calculateHeight(rootNode->rightChild);
-    return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
-}
-
-int getHeight(binaryTree *tree)
-{
-    height = calculateHeight(tree->Root);
-    return height;
-}       
-
-int calculateNodesCount(TreeNode* rootNode){
-    if(!rootNode)
-        return 0;
-    return calculateNodesCount(rootNode->rightChild) + calculateNodesCount(rootNode->leftChild) + 1;
-}
-
-int getNodesCount(binaryTree* tree){
-    nodesCount = calculateNodesCount(tree->Root);
-    return nodesCount;
-}
