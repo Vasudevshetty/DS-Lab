@@ -56,7 +56,7 @@ Stack *initStack()
         exit(1);
     }
     stack->Top = NULL;
-    stack->Length =  0;
+    stack->Length = 0;
     return stack;
 }
 
@@ -91,19 +91,23 @@ TreeNode *pop(Stack *stack)
     return nodeData;
 }
 
-TreeNode* peek(Stack* stack){
+TreeNode *peek(Stack *stack)
+{
     return isEmpty(stack) ? NULL : top->nodeData;
 }
 
-typedef struct{
+typedef struct
+{
     node *Front;
     node *Rear;
     int Count;
 } Queue;
 
-Queue* initQueue(){
+Queue *initQueue()
+{
     Queue *que = (Queue *)malloc(sizeof(Queue));
-    if(!que){
+    if (!que)
+    {
         printf("Memory allcoation failed.\n");
         exit(1);
     }
@@ -116,30 +120,34 @@ Queue* initQueue(){
 #define rear que->Rear
 #define count que->Count
 
-
-bool isEmptyQueue(Queue* que){
+bool isEmptyQueue(Queue *que)
+{
     return !(front && rear && count);
 }
 
-void enqueue(Queue* que, TreeNode* nodeData){
+void enqueue(Queue *que, TreeNode *nodeData)
+{
     node *newNode = initNode(nodeData);
-    if(isEmptyQueue(que))
+    if (isEmptyQueue(que))
         front = rear = newNode;
-    else{
+    else
+    {
         rear->next = newNode;
         rear = newNode;
     }
     count++;
 }
 
-TreeNode* dequeue(Queue* que){
-    if(isEmptyQueue(que)){
+TreeNode *dequeue(Queue *que)
+{
+    if (isEmptyQueue(que))
+    {
         printf("Empty queue, dequeueing failed.\n");
         return NULL;
     }
     node *toDelete = front;
     TreeNode *nodeData = toDelete->nodeData;
-    if(front == rear)
+    if (front == rear)
         front = rear = NULL;
     front = toDelete->next;
     free(toDelete);
@@ -147,3 +155,32 @@ TreeNode* dequeue(Queue* que){
     return nodeData;
 }
 
+void inOrder(TreeNode *root)
+{
+    if (root)
+    {
+        inOrder(root->leftChild);
+        printf("%d ", root->data);
+        inOrder(root->rightChild);
+    }
+}
+
+void preOrder(TreeNode *root)
+{
+    if (root)
+    {
+        printf("%d ", root->data);
+        preOrder(root->leftChild);
+        preOrder(root->rightChild);
+    }
+}
+
+void postOrder(TreeNode *root)
+{
+    if (root)
+    {
+        postOrder(root->leftChild);
+        postOrder(root->rightChild);
+        printf("%d ", root->data);
+    }
+}

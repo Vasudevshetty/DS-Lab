@@ -1,15 +1,15 @@
- 
+
 
 #include <stdio.h>
 #include <stdlib.h>
 
 // create a structure for node containing data and pointers to right and left child
-typedef struct Node{
+typedef struct Node
+{
     int data;
-    struct Node* leftChild;
-    struct Node* rightChild;
-}node;
-
+    struct Node *leftChild;
+    struct Node *rightChild;
+} node;
 
 // function to initalise node with given data
 void initNode(node *Node, int data)
@@ -29,7 +29,9 @@ void postOrder(node *root);
 
 int main()
 {
-   
+    node *root = NULL;
+    root = insert(root, 1);
+    preOrder(root);
     return EXIT_SUCCESS;
 }
 
@@ -42,10 +44,12 @@ node *insert(node *root, int data)
         root = newNode;
         return root;
     }
-    if (root->data < data) root->rightChild = insert(root->rightChild, data);
-    else if(root->data > data) root->leftChild = insert(root->leftChild, data);
+    if (root->data < data)
+        root->rightChild = insert(root->rightChild, data);
+    else if (root->data > data)
+        root->leftChild = insert(root->leftChild, data);
 
-    return root; 
+    return root;
 }
 
 // func definition
