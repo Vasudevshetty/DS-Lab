@@ -26,17 +26,17 @@ binarySearchTree *initBST()
     return tree;
 }
 
-void insertR(TreeNode **node, int data)
+void insertR(TreeNode **tempRoot, int data)
 {
-    if (*node == NULL)
+    if (*tempRoot == NULL)
     {
-        *node = initTreeNode(data);
+        *tempRoot = initTreeNode(data);
     }
 
-    if (data > (*node)->data)
-        insertR(&(*node)->rightChild, data);
-    else if (data < (*node)->data)
-        insertR(&(*node)->leftChild, data);
+    if (data > (*tempRoot)->data)
+        insertR(&(*tempRoot)->rightChild, data);
+    else if (data < (*tempRoot)->data)
+        insertR(&(*tempRoot)->leftChild, data);
 }
 
 void insert(binarySearchTree *tree, int data)
@@ -44,18 +44,18 @@ void insert(binarySearchTree *tree, int data)
     insertR(&root, data);
 }
 
-TreeNode *findMin(TreeNode *node)
+TreeNode *findMin(TreeNode *tempRoot)
 {
-    while(node->leftChild)
-        node = node->leftChild;
-    return node;
+    while (tempRoot->leftChild)
+        tempRoot = tempRoot->leftChild;
+    return tempRoot;
 }
 
-TreeNode *findMax(TreeNode *node)
+TreeNode *findMax(TreeNode *tempRoot)
 {
-    while (node->rightChild)
-        node = node->rightChild;
-    return node;
+    while (tempRoot->rightChild)
+        tempRoot = tempRoot->rightChild;
+    return tempRoot;
 }
 
 int getMin(binarySearchTree *tree)
@@ -70,21 +70,49 @@ int getMax(binarySearchTree *tree)
     return tree->max;
 }
 
+int findHeight(TreeNode *tempRoot)
+{
+    if (!tempRoot)
+        return -1;
+    int leftHeight = findHeight(tempRoot->leftChild);
+    int rightHeight = findHeight(tempRoot->rightChild);
+
+    return ((leftHeight > rightHeight) ? leftHeight : rightHeight) + 1;
+}
+
+int getHeight(binarySearchTree *tree)
+{
+    tree->height = findHeight(root);
+    return tree->height;
+}
+
+int findNodesCount(TreeNode *tempRoot)
+{
+    return !tempRoot ? 0 : findNodesCount(tempRoot->leftChild) + findNodesCount(tempRoot->rightChild) + 1;
+}
+
+int getNodesCount(binarySearchTree* tree){
+    tree->nodesCount = findNodesCount(root);
+    return tree->nodesCount;
+}
+
 int main()
 {
     binarySearchTree *tree = initBST();
-    int elements[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    int n = sizeof(elements) / sizeof(elements[0]);
 
-    for (int i = 0; i < n; i++)
-    {
-        insert(tree, elements[i]);
-    }
+    root = initTreeNode(5);
+    root->leftChild = initTreeNode(3);
+    root->rightChild = initTreeNode(7);
+    root->leftChild->leftChild = initTreeNode(2);
+    root->leftChild->rightChild = initTreeNode(4);
+    root->rightChild->rightChild = initTreeNode(8);
+    root->rightChild->leftChild = initTreeNode(6);
+
     preOrder(root);
     printf("\n");
     inOrder(root);
     printf("\n");
     postOrder(root);
-    printf("\n%d %d", getMin(tree), getMax(tree));
+    printf("\n%d %d %d %d", getMin(tree), getMax(tree), getHeight(tree), getNodesCount(tree));
     return 0;
 }
