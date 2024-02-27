@@ -25,15 +25,19 @@ binaryTree *initBinaryTree()
 #define height tree->Height
 #define nodesCount tree->NodesCount
 
-void preOrder(binaryTree *tree)
+char *preOrderIterative(binaryTree *tree)
 {
     TreeNode *temp = root;
     Stack *stack = initStack();
+    char *traversalString = (char *)malloc(sizeof(char) * 100);
+    int idx = 0;
     while (temp || !isEmpty(stack))
     {
         if (temp)
         {
-            printf("%d ", temp->data);
+            // printf("%d ", temp->data);
+            // since we are taking out the string, if need the traversal please use recursive function in  utility classes.
+            traversalString[idx++] = temp->data + '0';
             push(stack, temp);
             temp = temp->leftChild;
         }
@@ -43,13 +47,15 @@ void preOrder(binaryTree *tree)
             temp = temp->rightChild;
         }
     }
-    printf("\n");
+    return traversalString;
 }
 
-void inOrder(binaryTree *tree)
+char *inOrderIterative(binaryTree *tree)
 {
     TreeNode *temp = root;
     Stack *stack = initStack();
+    char *traversalString = (char *)malloc(sizeof(char) * 100);
+    int idx = 0;
     while (temp || !isEmpty(stack))
     {
         if (temp)
@@ -60,18 +66,22 @@ void inOrder(binaryTree *tree)
         else
         {
             temp = pop(stack);
-            printf("%d ", temp->data);
+            traversalString[idx++] = temp->data + '0';
+            // printf("%d ", temp->data);
+            // since we are taking out the string, if need the traversal please use recursive function in  utility classes.
             temp = temp->rightChild;
         }
     }
-    printf("\n");
+    return traversalString;
 }
 
-void postOrder(binaryTree *tree)
+char *postOrderIterative(binaryTree *tree)
 {
     TreeNode *temp = tree->Root;
     Stack *stack1 = initStack();
     Stack *stack2 = initStack();
+    char *traversalString = (char *)malloc(sizeof(char) * 100);
+    int idx = 0;
 
     push(stack1, temp);
     while (!isEmpty(stack1))
@@ -84,24 +94,37 @@ void postOrder(binaryTree *tree)
             push(stack1, temp->rightChild);
     }
     while (!isEmpty(stack2))
-        printf("%d ", pop(stack2)->data);
-    printf("\n");
+    {
+        int data = pop(stack2)->data;
+        // printf("%d ", data);
+        // since we are taking out the string, if need the traversal please use recursive function in  utility classes.
+        traversalString[idx++] = data + '0';
+    }
+    return traversalString;
 }
 
-void levelOrder(binaryTree *tree)
+char *levelOrderIterative(binaryTree *tree)
 {
     TreeNode *temp = root;
     Queue *que = initQueue();
+    char *traversalString = (char *)malloc(sizeof(char) * 100);
+    int idx = 0;
     enqueue(que, temp);
     while (!isEmptyQueue(que))
     {
         temp = dequeue(que);
-        printf("%d ", temp->data);
+        traversalString[idx++] = temp->data + '0';
+        // printf("%d ", temp->data);
+        // since we are taking out the string, if need the traversal please use recursive function in  utility classes.
         if (temp->leftChild)
             enqueue(que, temp->leftChild);
         if (temp->rightChild)
             enqueue(que, temp->rightChild);
     }
-    printf("\n");
+    return traversalString;
 }
 
+void generate(const char *preOrderString, const char *inOrderString)
+{
+
+}
