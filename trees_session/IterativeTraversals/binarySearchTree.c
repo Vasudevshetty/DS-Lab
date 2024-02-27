@@ -44,6 +44,32 @@ void insert(binarySearchTree *tree, int data)
     insertR(&root, data);
 }
 
+TreeNode *findMin(TreeNode *node)
+{
+    while(node->leftChild)
+        node = node->leftChild;
+    return node;
+}
+
+TreeNode *findMax(TreeNode *node)
+{
+    while (node->rightChild)
+        node = node->rightChild;
+    return node;
+}
+
+int getMin(binarySearchTree *tree)
+{
+    tree->min = findMin(root)->data;
+    return tree->min;
+}
+
+int getMax(binarySearchTree *tree)
+{
+    tree->max = findMax(root)->data;
+    return tree->max;
+}
+
 int main()
 {
     binarySearchTree *tree = initBST();
@@ -59,5 +85,6 @@ int main()
     inOrder(root);
     printf("\n");
     postOrder(root);
+    printf("\n%d %d", getMin(tree), getMax(tree));
     return 0;
 }
