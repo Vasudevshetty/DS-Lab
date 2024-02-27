@@ -124,7 +124,22 @@ char *levelOrderIterative(binaryTree *tree)
     return traversalString;
 }
 
-void generate(const char *preOrderString, const char *inOrderString)
+int findIndex(const char *string, char key, int start, int end)
 {
+    for (int i = start; i < end; i++)
+        if (string[i] == key)
+            return i;
 
+    return -1;
+}
+
+TreeNode *buildTree(const char *preOrderString, const char *inOrderString, int inStart, int inEnd, int* preIndex)
+{
+}
+
+binaryTree *generateTree(const char *preOrderString, const char *inOrderString)
+{
+    binaryTree *tree = initBinaryTree();
+    root = buildTree(preOrderString, inOrderString);
+    return tree;
 }
