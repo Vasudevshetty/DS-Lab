@@ -44,7 +44,7 @@ Stack *createStack()
     return stack;
 }
 
-void display(Stack *stack)
+void display(const Stack *stack)
 {
     if (!isEmpty(stack))
     {
@@ -60,7 +60,7 @@ void display(Stack *stack)
     free(stack);
 }
 
-bool isEmpty(Stack *stack)
+bool isEmpty(const Stack *stack)
 {
     return !(top && count);
 }
@@ -95,7 +95,7 @@ int pop(Stack *stack)
     return element;
 }
 
-int stackTop(Stack *stack)
+int stackTop(const Stack *stack)
 {
     if (isEmpty(stack))
     {
