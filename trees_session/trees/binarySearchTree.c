@@ -91,9 +91,45 @@ int findNodesCount(TreeNode *tempRoot)
     return !tempRoot ? 0 : findNodesCount(tempRoot->leftChild) + findNodesCount(tempRoot->rightChild) + 1;
 }
 
-int getNodesCount(binarySearchTree* tree){
+int getNodesCount(binarySearchTree *tree)
+{
     tree->nodesCount = findNodesCount(root);
     return tree->nodesCount;
+}
+
+TreeNode *deleteR(TreeNode *tempRoot, int data)
+{
+    if (!tempRoot)
+        return NULL;
+    if (data < tempRoot->data)
+        tempRoot->leftChild = deleteR(tempRoot->leftChild, data);
+    else if (data > tempRoot->data)
+        tempRoot->rightChild = deleteR(tempRoot->rightChild, data);
+    else
+    {
+        if (tempRoot->leftChild)
+        {
+            TreeNode *temp = tempRoot->leftChild;
+            free(tempRoot);
+            return temp;
+        }
+        if (tempRoot->rightChild)
+        {
+            TreeNode *temp = tempRoot->rightChild;
+            free(tempRoot);
+            return temp;
+        }
+
+        TreeNode *temp = findMin(tempRoot->rightChild);
+        tempRoot->data = temp->data;
+        tempRoot->rightChild = deleteR(tempRoot->rightChild, temp->data);
+    }
+    return tempRoot;
+}
+
+void delete(binarySearchTree *tree, int data)
+{
+    deleteR(root, data);
 }
 
 int main()
@@ -113,6 +149,24 @@ int main()
     inOrder(root);
     printf("\n");
     postOrder(root);
-    printf("\n%d %d %d %d", getMin(tree), getMax(tree), getHeight(tree), getNodesCount(tree));
+    // printf("\n%d %d %d %d", getMin(tree), getMax(tree), getHeight(tree), getNodesCount(tree));
+    delete (tree, 3);
+    preOrder(root);
+    printf("\n");
+    inOrder(root);
+    printf("\n");
+    postOrder(root);
+    delete (tree, 4);
+    preOrder(root);
+    printf("\n");
+    inOrder(root);
+    printf("\n");
+    postOrder(root);
+    delete (tree, 6);
+    preOrder(root);
+    printf("\n");
+    inOrder(root);
+    printf("\n");
+    postOrder(root);
     return 0;
 }
