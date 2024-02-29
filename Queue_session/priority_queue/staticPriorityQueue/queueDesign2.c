@@ -32,7 +32,8 @@ Element *createElement(int data, int priority)
 // this is a descending type of priorty queue.
 typedef struct
 {
-    Element *elements;
+    Element elements[MAX_SIZE];
+    // Element *elments; // if need dyanmically use this..
     // Element elements[MAX_SIZE]; (if need staticaly please implement this way.)
     int Front;
     int Rear;
@@ -46,7 +47,7 @@ typedef struct
 #define size que->Size
 
 // utility function to create a priorty queue with initailsation in heap.
-priorityQueue *createPriorityQueue(int sz)
+priorityQueue *createPriorityQueue()
 {
     priorityQueue *que = (priorityQueue *)malloc(sizeof(priorityQueue));
     if (!que)
@@ -54,14 +55,16 @@ priorityQueue *createPriorityQueue(int sz)
         printf("Memmory allocation failed.\n");
         exit(1);
     }
-    size = sz > MAX_SIZE ? MAX_SIZE : sz;
-    ele = (Element *)malloc(sizeof(Element) * size);
-    if (!ele)
-    {
-        printf("Memmory allocation failed.\n");
-        free(que);
-        exit(1);
-    }
+    size = MAX_SIZE;
+    /*this is dynamic memory allcoation.*/
+    // size = sz > MAX_SIZE ? MAX_SIZE : sz;
+    // ele = (Element *)malloc(sizeof(Element) * size);
+    // if (!ele)
+    // {
+    //     printf("Memmory allocation failed.\n");
+    //     free(que);
+    //     exit(1);
+    // }
     front = rear = -1;
     return que;
 }
@@ -149,10 +152,7 @@ void display(priorityQueue *que)
 // drive code.
 int main()
 {
-    int sz;
-    printf("Enter size of the queue : ");
-    scanf("%d", &sz);
-    priorityQueue *que = createPriorityQueue(sz);
+    priorityQueue *que = createPriorityQueue();
     int data, priority;
     int choice;
 
