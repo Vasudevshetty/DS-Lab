@@ -22,16 +22,18 @@ circularQueue *initCircularQueue(int size);
 // operations
 void enqueue(circularQueue *q, int data);
 int dequeue(circularQueue *q);
-int front(circularQueue *q);
-int rear(circularQueue *q);
+int front(const circularQueue *q);
+int rear(const circularQueue *q);
 
 // supporting functions
-void display(circularQueue *q);
-int isEmpty(circularQueue *q)
+void display(const circularQueue *q);
+
+int isEmpty(const circularQueue *q)
 {
     return q->front == -1 && q->rear == -1;
 }
-int isFull(circularQueue *q)
+
+int isFull(const circularQueue *q)
 {
     return (q->front == (q->rear + 1) % q->size);
 }
@@ -154,14 +156,14 @@ int dequeue(circularQueue *q)
     return data;
 }
 
-int front(circularQueue *q)
+int front(const circularQueue *q)
 {
     if (q->front != -1)
         return *(q->container + q->front);
     else
         return -1;
 }
-int rear(circularQueue *q)
+int rear(const circularQueue *q)
 {
     if (q->rear != -1)
         return *(q->container + q->rear);
@@ -169,7 +171,7 @@ int rear(circularQueue *q)
         return -1;
 }
 
-void display(circularQueue *q)
+void display(const circularQueue *q)
 {
     if (isEmpty(q))
     {

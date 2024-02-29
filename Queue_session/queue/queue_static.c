@@ -19,14 +19,14 @@ struct queue
 struct queue *createStaticQueue();
 
 // condtions.
-inline int isEmpty(const struct queue *);
-inline int isFull(const struct queue *);
+int isEmpty(const struct queue *);
+int isFull(const struct queue *);
 
 // operations.
 void enqueue(struct queue *, int);
 int dequeue(struct queue *);
-inline int front(const struct queue *);
-inline int rear(const struct queue *);
+int front(const struct queue *);
+int rear(const struct queue *);
 
 // display function
 void display(const struct queue *);
@@ -103,13 +103,13 @@ struct queue *createStaticQueue()
 }
 
 // function to check whether the queue is empty.
-inline int isEmpty(const struct queue *q)
+int isEmpty(const struct queue *q)
 {
     return q->front == -1 && q->rear == -1;
 }
 
 // function to check whetehr the queue is full.
-inline int isFull(const struct queue *q)
+int isFull(const struct queue *q)
 {
     return q->rear == q->size - 1;
 }
@@ -166,7 +166,7 @@ int dequeue(struct queue *q)
 }
 
 // support function returning front and rear values
-inline int front(const struct queue *q)
+int front(const struct queue *q)
 {
     // check whether the queue is empty before accessing.
     if (isEmpty(q))
@@ -178,7 +178,7 @@ inline int front(const struct queue *q)
     return q->container[q->front];
 }
 
-inline int rear(const struct queue *q)
+int rear(const struct queue *q)
 {
     // check whether the queue is empty before accessing.
     if (isEmpty(q))

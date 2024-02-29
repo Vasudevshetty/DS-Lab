@@ -42,7 +42,7 @@ queue *initQueue()
     return que;
 }
 
-bool isEmpty(queue *que)
+bool isEmpty(const queue *que)
 {
     return !(que->front && que->rear && que->size);
 }
@@ -78,17 +78,17 @@ int dequeue(queue *que)
     return data;
 }
 
-int front(queue *que)
+int front(const queue *que)
 {
     return isEmpty(que) ? -1 : que->front->data;
 }
 
-int rear(queue *que)
+int rear(const queue *que)
 {
     return isEmpty(que) ? -1 : que->rear->data;
 }
 
-void display(queue *que)
+void display(const queue *que)
 {
     if (isEmpty(que))
     {
