@@ -46,7 +46,7 @@ Stack *createStack()
     return stack;
 }
 
-bool isEmpty(Stack *stack)
+bool isEmpty(const Stack *stack)
 {
     return !(top && count);
 }
@@ -79,12 +79,12 @@ char pop(Stack *stack)
     return data;
 }
 
-char peek(Stack *stack)
+char peek(const Stack *stack)
 {
     return isEmpty(stack) ? -1 : top->data;
 }
 
-void display(Stack *stack)
+void display(const Stack *stack)
 {
     if (isEmpty(stack))
     {

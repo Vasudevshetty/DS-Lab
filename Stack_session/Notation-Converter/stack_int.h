@@ -46,7 +46,7 @@ StackInt *createStackInt()
     return stackInt;
 }
 
-bool isEmptyInt(StackInt *stackInt)
+bool isEmptyInt(const StackInt *stackInt)
 {
     return !(topInt && countInt);
 }
@@ -79,12 +79,12 @@ int popInt(StackInt *stackInt)
     return data;
 }
 
-int peekInt(StackInt *stackInt)
+int peekInt(const StackInt *stackInt)
 {
     return isEmptyInt(stackInt) ? -1 : topInt->data;
 }
 
-void displayInt(StackInt *stackInt)
+void displayInt(const StackInt *stackInt)
 {
     if (isEmptyInt(stackInt))
     {
