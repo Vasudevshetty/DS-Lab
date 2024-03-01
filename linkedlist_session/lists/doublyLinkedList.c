@@ -28,35 +28,35 @@ typedef struct
 } doubleLinkedList;
 
 // function to check conditions.
-int isEmpty(doubleLinkedList *myList);
-int isSorted(doubleLinkedList *myList);
+int isEmpty(const doubleLinkedList *);
+int isSorted(const doubleLinkedList *);
 
 // function to initalise the node and list.
-node *createNode(int data);
-void initNode(node *Node, int data);
+node *createNode(int);
+void initNode(node *Node, int);
 doubleLinkedList *initDoubleLinkedList();
 
 // function to insert.
-void insertAtHead(doubleLinkedList *myList, int data);
-void insertAtRear(doubleLinkedList *myList, int data);
-void insertAtPosition(doubleLinkedList *myList, int data, int position);
+void insertAtHead(doubleLinkedList *, int);
+void insertAtRear(doubleLinkedList *, int);
+void insertAt(doubleLinkedList *, int, int);
 
 // functions to delete.
-int deleteAtHead(doubleLinkedList *myList);
-int deleteAtRear(doubleLinkedList *myList);
-int deleteAtPosition(doubleLinkedList *myList, int position);
+int deleteAtHead(doubleLinkedList *);
+int deleteAtRear(doubleLinkedList *);
+int deleteAt(doubleLinkedList *, int);
 
 // operation on keys.
-node *searchByKey(doubleLinkedList *myList, int key);
-int deleteByKey(doubleLinkedList *myList, int key);
+node *searchBy(const doubleLinkedList *, int);
+int deleteBy(doubleLinkedList *, int);
 
 // other operatins.
-void createOrderedList(doubleLinkedList *myList, int data);
-void reverse(doubleLinkedList *myList);
-doubleLinkedList *copyList(doubleLinkedList *orginal);
+void createOrderedList(doubleLinkedList *, int);
+void reverse(doubleLinkedList *);
+doubleLinkedList *copyList(const doubleLinkedList *);
 
 // display function.
-void display(doubleLinkedList *myList);
+void display(const doubleLinkedList *);
 
 void destructList(doubleLinkedList *myList)
 {
@@ -209,7 +209,7 @@ void initNode(node *Node, int data)
 }
 
 // function to check the list is empty
-int isEmpty(doubleLinkedList *myList)
+int isEmpty(const doubleLinkedList *myList)
 {
     return !(myList->length && myList->head->next && myList->tail);
     /*This corrsponds to myList->length != 0 and myList->head->next != NULL and myList->tail != NULL. We should form a linked list such that,
@@ -439,7 +439,7 @@ int deleteAtPosition(doubleLinkedList *myList, int position)
 }
 
 // function to search a key and return the node pointer.
-node *searchByKey(doubleLinkedList *myList, int key)
+node *searchByKey(const doubleLinkedList *myList, int key)
 {
     if (isEmpty(myList))
         return NULL;
@@ -496,7 +496,7 @@ int deleteByKey(doubleLinkedList *myList, int key)
 }
 
 // function to check whether the list is sorted.
-int isSorted(doubleLinkedList *myList)
+int isSorted(const doubleLinkedList *myList)
 {
     if (isEmpty(myList) || myList->length == 1)
     {
@@ -599,7 +599,7 @@ void reverse(doubleLinkedList *myList)
 }
 
 // function to copy the list to another list and return.
-doubleLinkedList *copyList(doubleLinkedList *orginal)
+doubleLinkedList *copyList(const doubleLinkedList *orginal)
 {
     // create a copy double linkedlist and initalise.
     doubleLinkedList *copy = initDoubleLinkedList();
@@ -619,7 +619,7 @@ doubleLinkedList *copyList(doubleLinkedList *orginal)
 }
 
 // function to display the linked list.
-void display(doubleLinkedList *myList)
+void display(const doubleLinkedList *myList)
 {
     // check whether the list is empty
     if (isEmpty(myList))

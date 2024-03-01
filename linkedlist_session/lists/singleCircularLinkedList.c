@@ -25,7 +25,7 @@ typedef struct
 } linkedListCircular;
 
 // function to check whether the linkedlist is emptpy. (type int returns 1(true) if empty else 0(false))
-int isEmpty(linkedListCircular *myList)
+int isEmpty(const linkedListCircular *myList)
 {
     return !(myList->head->next && myList->length);
     /*this corresponds to the condition (myList->head->next == NULL && myList->length == 0) a boolean condtion where
@@ -34,38 +34,38 @@ int isEmpty(linkedListCircular *myList)
 
 // function to confirm whether the linkedlist is circular or not.
 // returns 1(true) and 0(false) being int in return.
-int isCircular(linkedListCircular *myList);
+int isCircular(const linkedListCircular *);
 
 // function to check whether the function is sorted.
-int isSorted(linkedListCircular *myList);
+int isSorted(const linkedListCircular *);
 
 // initalisation functions for Node and linkedlist.
-void initNode(Node *Node, int data);
+void initNode(Node *, int);
 linkedListCircular *initLinkedList();
-Node *createNode(int data);
+Node *createNode(int);
 
 // Insertion functions.
-void insertAtHead(linkedListCircular *myList, int data);
-void insertAtRear(linkedListCircular *myList, int data);
-void insertAtPosition(linkedListCircular *myList, int data, int position);
+void insertAtHead(linkedListCircular *, int);
+void insertAtRear(linkedListCircular *, int);
+void insertAtPosition(linkedListCircular *, int, int);
 
 // deletion functions.
 /*Delete functions return the value that got deleted.*/
-int deleteAtHead(linkedListCircular *myList);
-int deleteAtRear(linkedListCircular *myList);
-int deleteAtPosition(linkedListCircular *myList, int position);
+int deleteAtHead(linkedListCircular *);
+int deleteAtRear(linkedListCircular *);
+int deleteAtPosition(linkedListCircular *, int);
 
 // operation on keys.
-Node *searchByKey(linkedListCircular *myList, int key);
-int deleteByKey(linkedListCircular *myList, int key);
+Node *searchByKey(const linkedListCircular *, int);
+int deleteByKey(linkedListCircular *, int);
 
 // operations on linkedlist.
-void createOrderedList(linkedListCircular *myList, int data);
-void reverse(linkedListCircular *myList);
-linkedListCircular *copyList(linkedListCircular *orginal);
+void createOrderedList(linkedListCircular *, int);
+void reverse(linkedListCircular *);
+linkedListCircular *copyList(const linkedListCircular *);
 
 // display function.
-void display(linkedListCircular *myList);
+void display(const linkedListCircular *);
 
 // destructing function for allocated momory.
 void destructList(linkedListCircular *myList)
@@ -236,7 +236,7 @@ void initNode(Node *Node, int data)
 }
 
 // function to check whether the given linkedlist is circular or not.
-int isCircular(linkedListCircular *myList)
+int isCircular(const linkedListCircular *myList)
 {
     // An empty list is not considerd circular.
     if (isEmpty(myList))
@@ -414,7 +414,8 @@ int deleteAtHead(linkedListCircular *myList)
     // traverse until the last Node.
     Node *temp = myList->head->next;
 
-    if(temp->next == myList->head->next){
+    if (temp->next == myList->head->next)
+    {
         free(myList->head->next);
         myList->head->next = NULL;
         myList->length--;
@@ -463,9 +464,8 @@ int deleteAtRear(linkedListCircular *myList)
     Node *temp = myList->head->next;
 
     // added edge case where the list conatins only one element.
-    if(temp->next == myList->head->next)
+    if (temp->next == myList->head->next)
         return deleteAtHead(myList);
-    
 
     while (temp->next->next != myList->head->next)
     {
@@ -534,7 +534,7 @@ int deleteAtPosition(linkedListCircular *myList, int position)
 }
 
 // function to search a key and return the address(Node's).
-Node *searchByKey(linkedListCircular *myList, int key)
+Node *searchByKey(const linkedListCircular *myList, int key)
 {
     // as usual check whether it is empty and circular.
     if (isEmpty(myList))
@@ -625,7 +625,7 @@ int deleteByKey(linkedListCircular *myList, int key)
 }
 
 // function to check whether the list is sorted in ascending order or not.
-int isSorted(linkedListCircular *myList)
+int isSorted(const linkedListCircular *myList)
 {
     // if the list is empty return as true (sorted).
     if (isEmpty(myList))
@@ -728,7 +728,7 @@ void reverse(linkedListCircular *myList)
 }
 
 // function to copy the list to another list and return.
-linkedListCircular *copyList(linkedListCircular *myList)
+linkedListCircular *copyList(const linkedListCircular *myList)
 {
     linkedListCircular *copy = initLinkedList();
     // create a structure for storing copy and return with initalisation.
@@ -752,7 +752,7 @@ linkedListCircular *copyList(linkedListCircular *myList)
     return copy;
 }
 
-void display(linkedListCircular *myList)
+void display(const linkedListCircular *myList)
 {
     // checking whether the list is empty
     if (isEmpty(myList))

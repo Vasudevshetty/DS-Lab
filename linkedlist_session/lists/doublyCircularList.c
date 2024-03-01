@@ -35,38 +35,38 @@ typedef struct
 } circularDoubleLinkedList;
 
 // function to check conditions.
-int isEmpty(circularDoubleLinkedList *myList);
-int isCircular(circularDoubleLinkedList *myList);
-int isSorted(circularDoubleLinkedList *myList);
+int isEmpty(const circularDoubleLinkedList *);
+int isCircular(const circularDoubleLinkedList *);
+int isSorted(const circularDoubleLinkedList *);
 
 // function to initalise the node and list.
-void initNode(node *Node, int data);
+void initNode(node *, int);
 circularDoubleLinkedList *initCircularDoubleLinkedList();
-node *createNode(int data);
+node *createNode(int);
 
 // function to insert.
-void insertAtHead(circularDoubleLinkedList *myList, int data);
-void insertAtRear(circularDoubleLinkedList *myList, int data);
-void insertAtPosition(circularDoubleLinkedList *myList, int data, int position);
+void insertAtHead(circularDoubleLinkedList *, int);
+void insertAtRear(circularDoubleLinkedList *, int);
+void insertAtPosition(circularDoubleLinkedList *, int, int);
 
 // functions to delete.
-int deleteAtHead(circularDoubleLinkedList *myList);
-int deleteAtRear(circularDoubleLinkedList *myList);
-int deleteAtPosition(circularDoubleLinkedList *myList, int position);
+int deleteAtHead(circularDoubleLinkedList *);
+int deleteAtRear(circularDoubleLinkedList *);
+int deleteAtPosition(circularDoubleLinkedList *, int);
 
 // operation on keys.
-node *searchByKey(circularDoubleLinkedList *myList, int key);
-int deleteByKey(circularDoubleLinkedList *myList, int key);
+node *searchByKey(const circularDoubleLinkedList *, int);
+int deleteByKey(circularDoubleLinkedList *, int);
 
 // other operatins.
-void createOrderedList(circularDoubleLinkedList *myList, int data);
-void reverse(circularDoubleLinkedList *myList);
-circularDoubleLinkedList *copyList(circularDoubleLinkedList *myList);
+void createOrderedList(circularDoubleLinkedList *, int);
+void reverse(circularDoubleLinkedList *);
+circularDoubleLinkedList *copyList(const circularDoubleLinkedList *);
 
 // display function.
-void display(circularDoubleLinkedList *myList);
+void display(const circularDoubleLinkedList *);
 
-void destructList(circularDoubleLinkedList *myList);
+void destructList(circularDoubleLinkedList *);
 
 int main()
 {
@@ -178,13 +178,15 @@ int main()
     return 0;
 }
 
-void destructList(circularDoubleLinkedList* myList){
-    node* temp = myList->head->next;
-    do{
-      node* next = temp->next;
-      free(temp);
-      temp = next;  
-    }while(temp != myList->head->next);
+void destructList(circularDoubleLinkedList *myList)
+{
+    node *temp = myList->head->next;
+    do
+    {
+        node *next = temp->next;
+        free(temp);
+        temp = next;
+    } while (temp != myList->head->next);
     free(myList->head);
     free(myList->tail);
     free(myList);
@@ -227,13 +229,13 @@ circularDoubleLinkedList *initCircularDoubleLinkedList()
 }
 
 // function to check whether the list is empty or not.
-int isEmpty(circularDoubleLinkedList *myList)
+int isEmpty(const circularDoubleLinkedList *myList)
 {
     return !(myList->length && myList->head->next && myList->tail);
 }
 
 // function to check whether the given list is circular or not.
-int isCircular(circularDoubleLinkedList *myList)
+int isCircular(const circularDoubleLinkedList *myList)
 {
     if (isEmpty(myList))
     {
@@ -511,7 +513,7 @@ int deleteAtPosition(circularDoubleLinkedList *myList, int position)
 }
 
 // function to return the address of the node if the key is present.
-node *searchByKey(circularDoubleLinkedList *myList, int key)
+node *searchByKey(const circularDoubleLinkedList *myList, int key)
 {
     // check is it valid list or not.
     if (isEmpty(myList))
@@ -594,7 +596,7 @@ int deleteByKey(circularDoubleLinkedList *myList, int key)
 }
 
 // functiont to check whether it is sorted or not.
-int isSorted(circularDoubleLinkedList *myList)
+int isSorted(const circularDoubleLinkedList *myList)
 {
     if (!isCircular(myList) || isEmpty(myList))
     {
@@ -686,7 +688,7 @@ void reverse(circularDoubleLinkedList *myList)
 }
 
 // function to copy the list to a new list and return the copy.
-circularDoubleLinkedList *copyList(circularDoubleLinkedList *original)
+circularDoubleLinkedList *copyList(const circularDoubleLinkedList *original)
 {
     // create a new list named copy and iniatlised.
     circularDoubleLinkedList *copy = initCircularDoubleLinkedList();
@@ -708,7 +710,7 @@ circularDoubleLinkedList *copyList(circularDoubleLinkedList *original)
 }
 
 // function to display.
-void display(circularDoubleLinkedList *myList)
+void display(const circularDoubleLinkedList *myList)
 {
     // checking whether the list is empty
     if (isEmpty(myList))

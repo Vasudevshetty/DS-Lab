@@ -27,7 +27,7 @@ typedef struct
 } linkedList;
 
 // function to check whether the linkedlist is emptpy. (type int returns 1(true) if empty else 0(false))
-int isEmpty(linkedList *myList)
+int isEmpty(const linkedList *myList)
 {
     return !(myList->head->next && myList->length);
     /*this corresponds to the condition (myList.head == NULL && myList.length == 0) a boolean condtion where
@@ -35,35 +35,35 @@ int isEmpty(linkedList *myList)
 }
 
 // function to check whether the function is sorted.
-int isSorted(linkedList *myList);
+int isSorted(const linkedList *);
 
 // initalisation functions for Node and linkedlist.
-Node *createNode(int data);
-void initNode(Node *Node, int data);
+Node *createNode(int);
+void initNode(Node *, int);
 linkedList *initLinkedList();
 
 // Insertion functions.
-void insertAtHead(linkedList *myList, int data);
-void insertAtRear(linkedList *myList, int data);
-void insertAtPosition(linkedList *myList, int data, int position);
+void insertAtHead(linkedList *, int);
+void insertAtRear(linkedList *, int);
+void insertAtPosition(linkedList *, int, int);
 
 // deletion functions.
 /*Delete functions return the value that got deleted.*/
-int deleteAtHead(linkedList *myList);
-int deleteAtRear(linkedList *myList);
-int deleteAtPosition(linkedList *myList, int position);
+int deleteAtHead(linkedList *);
+int deleteAtRear(linkedList *);
+int deleteAtPosition(linkedList *, int);
 
 // operation on keys.
-Node *searchByKey(linkedList *myList, int key);
-int deleteByKey(linkedList *myList, int key);
+Node *searchByKey(const linkedList *, int);
+int deleteByKey(linkedList *, int);
 
 // operations on linkedlist.
-void createOrderedList(linkedList *myList, int data);
-void reverse(linkedList *myList);
-linkedList *copyList(linkedList *orginal);
+void createOrderedList(linkedList *, int);
+void reverse(linkedList *);
+linkedList *copyList(const linkedList *);
 
 // display function.
-void display(linkedList *myList);
+void display(const linkedList *);
 
 // destructor function for memory allocated using malloc.
 void destructLinkedList(linkedList *myList)
@@ -435,7 +435,7 @@ int deleteAtPosition(linkedList *myList, int position)
 // function to search a key and return the address of the Node(pointer)
 /*This function's return value is intentionaly made Node pointer since it makes easier for the deleteByKey function easier. and it can
 be even made as a message printing function or returning true(1) or false(0) functions too.*/
-Node *searchByKey(linkedList *myList, int key)
+Node *searchByKey(const linkedList *myList, int key)
 {
     // check whether the list is empty.
     if (isEmpty(myList))
@@ -503,7 +503,7 @@ int deleteByKey(linkedList *myList, int key)
 }
 
 // function to check whether the linkedlist is sorted or not.
-int isSorted(linkedList *myList)
+int isSorted(const linkedList *myList)
 {
     Node *temp = myList->head->next;
 
@@ -525,7 +525,7 @@ else the code doesn't work, it do work but operation will not be as intended.*/
 // function to create ordered list. (acsending/sorted order).
 void createOrderedList(linkedList *myList, int data)
 {
-    Node* newNode = createNode(data);
+    Node *newNode = createNode(data);
 
     // ensure the linkedlist is sorted.
     if (isSorted(myList))
@@ -598,7 +598,7 @@ void reverse(linkedList *myList)
 }
 
 // function to create a copy of the linked list and return a new linkedlist.
-linkedList *copyList(linkedList *orginal)
+linkedList *copyList(const linkedList *orginal)
 {
     linkedList *copy = initLinkedList(); // initalize the linkedlist.
 
@@ -614,7 +614,7 @@ linkedList *copyList(linkedList *orginal)
     return copy;
 }
 
-void display(linkedList *myList)
+void display(const linkedList *myList)
 {
     Node *temp = myList->head->next;
     // keeping a pointer to slide through the linkedlist.
