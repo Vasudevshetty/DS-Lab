@@ -1,4 +1,4 @@
-/* Develop a menu driven program to implement various operations on array
+/* Develop arr->menu driven program to implement various operations on array
 storage representation with static and dynamic memory allocation.
 i) Insert by position. ii) Delete by position. iii) Insert by key. iv) Delete by key.
 v) Insert by order. vi) Search by key. vii) Search by position. viii) Reverse the contents.*/
@@ -9,70 +9,78 @@ v) Insert by order. vi) Search by key. vii) Search by position. viii) Reverse th
 #define max_size 100
 // maximum size of array.
 
-struct array
+typedef struct
 {
     int *array;
     // pointer to store the base address of array.
     int size;
-    // variable to create a array of size.
+    // variable to create arr->array of size.
     int length;
     // variable to track down length.
-};
-/* Created a structure called array with respective members.*/
+} Array;
+/* Created arr->structure called array with respective members.*/
 
 // function to display.
-// passing as a value is enough due to its operation of printing and not in requirement of any changes.
-void display(struct array a)
+// passing as arr->value is enough due to its operation of printing and not in requirement of any changes.
+void display(const Array *arr)
 {
-    if (a.length == 0)
+    if (arr->length == 0)
     {
         printf("No elements to display...\n");
         return;
     }
 
     printf("Elements of the array are,\n");
-    for (int i = 0; i < a.length; i++)
+    for (int i = 0; i < arr->length; i++)
     {
-        printf("%d ", *(a.array + i));
+        printf("%d ", *(arr->array + i));
     }
     printf("\n");
 }
 
 // function to initalise the refernced array from main.
-// passed as a refernce to use the same structure passed by main instead making a copy.
-void initArray(struct array *a)
+// passed as arr->refernce to use the same structure passed by main instead making arr copy.
+Array *initArray()
 {
+    Array *arr = (Array *)malloc(sizeof(Array));
+    if (!arr)
+    {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
     printf("Enter the size of the array: ");
-    scanf("%d", &a->size);
+    scanf("%d", &arr->size);
 
-    a->array = (int *)calloc(a->size, sizeof(int)); // initalised zero in the array.
+    arr->array = (int *)calloc(arr->size, sizeof(int)); // initalised zero in the array.
 
     // condition in case memory allocation gets failed.
-    if (a->array == NULL)
+    if (arr->array == NULL)
     {
         printf("Memory allocation failed...\n");
         exit(1);
     }
 
-    a->length = 0; // set length as zero.
+    arr->length = 0; // set length as zero.
+    return arr;
 }
 
 // function to destruct or to free the memory dynamically allocated.
-void freeArray(struct array *a)
+void freeArray(Array *arr)
 {
-    free(a->array);          // free dynamically created array.
-    a->array = NULL;         // set array pointer to null.
-    a->size = a->length = 0; // deinitalise.
+    free(arr->array);            // free dynamically created array.
+    arr->array = NULL;           // set array pointer to null.
+    arr->size = arr->length = 0; // deinitalise.
+    free(arr);                   // free the array structure too.
 }
 
 // function to insert value at given position in the array.
 /*Using structure, makes it easy to have organised pair of size, length and the array so as to track down easily with memory related issues.
 Note the array is again being refernced to have changes in the array that is being passed from the main function.*/
-void insertByPosition(struct array *a, int position, int value)
+void insertByPosition(Array *arr, int position, int value)
 {
 
     // checking whether the position provided is valid.
-    if (position < 0 || position > a->size)
+    if (position < 0 || position >= arr->length)
     {
         printf("Invalid position to insert. Insertion failed.\n");
         return;
@@ -80,15 +88,15 @@ void insertByPosition(struct array *a, int position, int value)
 
     // checking whether the array of size is being filled out and manipulating across.
     //  i.e If the array is full, allocate more memory...
-    if (a->length == a->size && a->size != max_size)
+    if (arr->length == arr->size && arr->size != max_size)
     {
-        a->size++;
+        arr->size++;
         // in that case extend the size to accmodate the new value instead of popping out one.
-        a->array = realloc(a->array, a->size * sizeof(int));
+        arr->array = realloc(arr->array, arr->size * sizeof(int));
         // reallocation of memory is done to ensure the memory is given acc to.
 
         // further check if memory management fails.
-        if (a->array == NULL)
+        if (arr->array == NULL)
         {
             printf("Memory reallocation failed...\n");
             exit(1);
@@ -97,83 +105,83 @@ void insertByPosition(struct array *a, int position, int value)
 
     // rearranging the array so as to make space for the value to inserted at that position.
     // shifting of the value at the neighbourhood position takes place.
-    for (int i = a->length; i > position; i--)
+    for (int i = arr->length; i > position; i--)
     {
-        *(a->array + i) = *(a->array + i - 1);
+        *(arr->array + i) = *(arr->array + i - 1);
     }
 
-    *(a->array+position) = value; // value is being inserted.
+    *(arr->array + position) = value; // value is being inserted.
 
     // length variable is updated.
-    a->length++;
+    arr->length++;
 
     printf("\nElement %d inserted at position %d.\n\n", value, position);
 
     // displaying
-    display(*a);
+    display(arr);
 }
 
 // function to delete element at position and returning it.
-// passed as a refernce to encounter changes.
-int deleteByPosition(struct array *a, int position)
+// passed as arr->refernce to encounter changes.
+int deleteByPosition(Array *arr, int position)
 {
 
     // checking whether the given position is valid.
-    if (position < 0 || position >= a->length)
+    if (position < 0 || position >= arr->length)
     {
         printf("Invalid position to delete. Deletion failed...\n");
         return -1;
     }
 
-    if (a->length == 0)
+    if (arr->length == 0)
     {
         printf("No elements to delete..\n");
         return -1;
     }
 
-    int deletedElement = a->array[position]; // take the element to be deleted.
+    int deletedElement = arr->array[position]; // take the element to be deleted.
 
     // shifting the elements in place.
-    for (int i = position; i < a->length - 1; i++)
+    for (int i = position; i < arr->length - 1; i++)
     {
-        *(a->array + i) = *(a->array + i + 1);
+        *(arr->array + i) = *(arr->array + i + 1);
     }
 
-    // decrease the length due to deletion of a element.
-    a->length--;
+    // decrease the length due to deletion of arr->element.
+    arr->length--;
     // optional to make the last element as zero as to understand the shift that occured due to deletion of element.
-    a->array[a->length] = 0;
+    arr->array[arr->length] = 0;
 
     printf("Deleted %d at position %d.\n", deletedElement, position);
 
-    display(*a); // displaying of the array.
+    display(arr); // displaying of the array.
     return deletedElement;
 }
 
 // function to search the element by position and return with printing approprite msg.
-// passed as a value since no changes are required.
-int searchByPosition(struct array a, int position)
+// passed as arr->value since no changes are required.
+int searchByPosition(const Array *arr, int position)
 {
     // checking whether the position is valid or not.
-    if (position < 0 || position > a.length - 1)
+    if (position < 0 || position > arr->length - 1)
     {
-        printf("Not a valid positon to search.\n");
+        printf("Not arr->valid positon to search.\n");
         return -1;
     }
 
-    printf("Element %d found at position %d.\n", a.array[position], position);
+    printf("Element %d found at position %d.\n", arr->array[position], position);
 
-    return *(a.array+position);
+    return *(arr->array + position);
 }
 
 // function to search the element by key and return with printing approprite msg.
-// passed as a value since no changes are required.
-int searchByKey(struct array a, int key)
+// passed as arr->value since no changes are required.
+int searchByKey(const Array *arr, int key)
 {
     // simple linear search technique.
-    for (int i = 0; i < a.length; i++)
+    for (int i = 0; i < arr->length; i++)
     {
-        if (a.array[i] == key) // can be used pointer type too.
+        if (arr->array[i] == key) // can be used pointer type too.
         {
             printf("Element %d found at position(index) %d.\n", key, i);
             return i;
@@ -184,45 +192,45 @@ int searchByKey(struct array a, int key)
 }
 
 // function to reverse the array.
-// passed as a reference so as it have changes in the array.
-void reverseArray(struct array *a)
+// passed as arr->reference so as it have changes in the array.
+void reverseArray(Array *arr)
 {
-    if (a->length == 0)
+    if (arr->length == 0)
     {
         printf("No elements to reverse.\n");
         return;
     }
     // swapping of the first and last counterparts happen in this logic, i.e first swaps with last, second with last-second , etc....
-    for (int i = 0, j = a->length - 1; i < j; i++, j--)
+    for (int i = 0, j = arr->length - 1; i < j; i++, j--)
     {
-        int temp = *(a->array+i);
-        *(a->array+i) = *(a->array+j);
-        *(a->array+j) = temp;
+        int temp = *(arr->array + i);
+        *(arr->array + i) = *(arr->array + j);
+        *(arr->array + j) = temp;
         // can be done using indexing too.
     }
     printf("Reversed array is,\n");
-    display(*a);
+    display(arr);
 }
 
 // function to insert elements in order (either ascending, descending or any custom order.)
 // insertion is done by comparing with the value and with the operation req like either ascending or descending likewise.
-// passed as a reference to observe changes in the structure passed.
-void insertByOrder(struct array *a, int value)
+// passed as arr->reference to observe changes in the structure passed.
+void insertByOrder(Array *arr, int value)
 {
     int position = 0;
 
-    while (position < a->length && a->array[position] < value)
+    while (position < arr->length && arr->array[position] < value)
         position++;
 
-    /*Since inserting by order requires a positon to be inserted while maintaining the order, finding the correct position is the only
+    /*Since inserting by order requires arr->positon to be inserted while maintaining the order, finding the correct position is the only
     task. Upon finding the position as described above in the while loop calling the function insertByPosition() makes the work complete.*/
-    insertByPosition(a, position, value);
+    insertByPosition(arr, position, value);
 }
 
 // function to insert by key
-void insertByKey(struct array *a, int key, int value)
+void insertByKey(Array *arr, int key, int value)
 {
-    int position = searchByKey(*a, key);
+    int position = searchByKey(arr, key);
     // the function returns the index of the key.
 
     if (position == -1)
@@ -231,13 +239,13 @@ void insertByKey(struct array *a, int key, int value)
         return;
     }
     // checking whether the postion was found or not if not message, else call the insertByPosition function.
-    insertByPosition(a, position, value);
+    insertByPosition(arr, position, value);
 }
 
 // function to delete by key.
-void deleteByKey(struct array *a, int key)
+void deleteByKey(Array *arr, int key)
 {
-    int position = searchByKey(*a, key);
+    int position = searchByKey(arr, key);
     // the function returns the index of the key.
 
     if (position == -1)
@@ -246,7 +254,7 @@ void deleteByKey(struct array *a, int key)
         return;
     }
     // checking whether the postion was found or not if not message, else call the deleteByPosition function.
-    deleteByPosition(a, position);
+    deleteByPosition(arr, position);
 }
 
 int main()
@@ -254,12 +262,7 @@ int main()
     int choice;
     int value, position, key;
 
-    struct array a;
-
-    // initalsation of structure is done by calling initArray function the structure is referenced.
-    // The reason for referencing it is to change the values of the same array we created in the main rather than creating a new array.
-    // Note, know about the local variable, global variable and the function bound variables, understand the consequences.
-    initArray(&a); // array is referenced.
+    Array *arr = initArray();
 
     do
     {
@@ -282,46 +285,46 @@ int main()
         case 1:
             printf("Enter the position to be inserted and the value : ");
             scanf("%d %d", &position, &value);
-            insertByPosition(&a, position, value);
+            insertByPosition(arr, position, value);
             break;
         case 2:
             printf("Enter position to be delete: ");
             scanf("%d", &position);
-            deleteByPosition(&a, position);
+            deleteByPosition(arr, position);
             break;
         case 3:
             printf("Enter key and value to be inserted: ");
             scanf("%d %d", &key, &value);
-            insertByKey(&a, key, value);
+            insertByKey(arr, key, value);
             break;
         case 4:
             printf("Enter key to be deleted: ");
             scanf("%d", &key);
-            deleteByKey(&a, key);
+            deleteByKey(arr, key);
             break;
         case 5:
             printf("Enter value to insert in order: ");
             scanf("%d", &value);
-            insertByOrder(&a, value);
+            insertByOrder(arr, value);
             break;
         case 6:
             printf("Enter position to be searched: ");
             scanf("%d", &position);
-            searchByPosition(a, position);
+            searchByPosition(arr, position);
             break;
         case 7:
             printf("Enter key to be searched: ");
             scanf("%d", &key);
-            searchByKey(a, key);
+            searchByKey(arr, key);
             break;
         case 8:
-            reverseArray(&a);
+            reverseArray(arr);
             break;
         case 9:
-            display(a);
+            display(arr);
             break;
         case 10:
-            freeArray(&a);
+            freeArray(arr);
             printf("Exiting....\n");
             break;
         default:
@@ -329,5 +332,6 @@ int main()
             break;
         }
     } while (choice != 10);
+    freeArray(arr);
     return 0;
 }
