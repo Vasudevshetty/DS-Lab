@@ -106,8 +106,9 @@ int pop(Stack *stack)
 }
 
 // 3. peek (stackTop() fucntion)
-int peek(Stack* stack){
-    if(isEmpty(stack))
+int peek(Stack *stack)
+{
+    if (isEmpty(stack))
         return -1;
     else
         return stack->stackArray[stack->top];
@@ -117,3 +118,122 @@ int peek(Stack* stack){
 ------------------------------ CONVERSION AND EVALUATION FUCNTIONS-------------------------------------------
 */
 
+// suport functions.
+/*1 to check whether the given token is operand. again bool is a datatype that returns only true or false.
+usually we keep these functions int,  the function returns integer values, where 0 corresponds to false, and other than
+zero is considered as true. so instead of that delimma use bool (shift towards OOPS (java or c++))
+*/
+bool isOperand(char c)
+{
+    return (c >= 'a' && c <= 'z') && (c >= 'A' && c <= 'Z') && (c >= '0' && c <= '9');
+}
+
+// 2. precedence function.
+int precedence(char c)
+{
+    if (c == '^' || c == '%')
+        return 3;
+    else if (c == '*' || c == '/')
+        return 2;
+    else if (c == '+' || c == '-')
+        return 1;
+    else
+        return 0;
+}
+
+// lets keep the infix to postfix convert function to return the postifx covnerted string, (char array).
+char *infixToPostfix(char *infix)
+{
+    // lets obtain the length of the string from string functions instead of sending one in the function.
+    int i = 0, len = strlen(infix);
+    char *postfix = (char *)malloc(sizeof(char) * len);
+    int j = 0;
+
+    // create the stack .
+    Stack *stack = createStack();
+
+    while (i < len)
+    {
+        char token = infix[i]; // capture the token
+
+        if (isOperand(token)) // if token append to postfix string directly
+            postfix[j++] = token;
+        else if (token == '(') // if operning parenthisis push to stack.
+            push(stack, token);
+        else if (token == ')')
+        {
+            // if closing parenthis, empty out the stack until you find the operning parethisis(previoudly pushed)
+            while (!isEmpty(stack) && peek(stack) == '(')
+                postfix[j++] = pop(stack);
+            pop(stack); // and then pop the opening parenthisis too.
+        }
+        else
+        {
+            /* else if it is a operator, push the operator if the operator is of higher precedence else,
+            empty out the stack utnil you find the exact position int he stack where the oeprator gets fitted.*/
+            while (!isEmpty(stack) && precedence(token) <= precedence(peek(stack)))
+                postfix[j++] = pop(stack);
+            push(stack, token);
+        }
+        i++; // increment the infix string pointer.
+    }
+
+    // empty out the stack.
+    while (!isEmpty(stack))
+        postfix[j++] = pop(stack);
+
+    postfix[j] = '\0';
+
+    return postfix;
+}
+
+// support fucntion for evaulate function.
+bool isOperator(char c)
+{
+    return c == '*' || c == '-' || c == '+' || c == '/' || c == '^' || c == '$';
+}
+
+int evulatePostfix(char *postfix)
+{
+    int i = 0, len = strlen(postfix);
+    Stack *stack = createStack();
+
+    while (i < len)
+    {
+        char token = postfix[i];
+        if (isOperand(token))
+            push(stack, token - '0');
+        else if (isOperator(token))
+        {
+            int operand2 = pop(stack);
+            int operand1 = pop(stack);
+            int result;
+
+            switch (token)
+            {
+            case '+':
+                result = operand1 + operand2;
+                break;
+            case '-':
+                result = operand1 - operand2;
+                break;
+            case '*':
+                result = operand1 * operand2;
+                break;
+            case '/':
+                result = operand1 / operand2;
+                break;
+            // this case is merged coz both does the same case.
+            case '%':
+            case '$':
+                result = pow(operand2, operand1);
+                break;
+            }
+            
+            // push the result later.
+            push(stack, result);
+        }
+        i++;
+    }
+    return pop(stack);
+}
