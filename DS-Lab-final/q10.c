@@ -125,7 +125,7 @@ zero is considered as true. so instead of that delimma use bool (shift towards O
 */
 bool isOperand(char c)
 {
-    return (c >= 'a' && c <= 'z') && (c >= 'A' && c <= 'Z') && (c >= '0' && c <= '9');
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
 }
 
 // 2. precedence function.
@@ -229,11 +229,20 @@ int evulatePostfix(char *postfix)
                 result = pow(operand2, operand1);
                 break;
             }
-            
+
             // push the result later.
             push(stack, result);
         }
         i++;
     }
     return pop(stack);
+}
+
+int main()
+{
+    char infix[100], *postfix;
+    scanf("%s", infix);
+    postfix = infixToPostfix(infix);
+    printf("%s", postfix);
+    return 0;
 }
