@@ -2,6 +2,10 @@
 
 Explore my solutions and implementations for various data structures lab questions.
 
+- Implmented with structures only.
+- Used a very good naming convention.
+- Well indeneted and commented.
+
 # Table of Contents
 
 JSSSTU 3rd Sem, DS-LAB (22CS36L)
