@@ -208,3 +208,36 @@ binaryTree *generateTree(const int *preOrderString, const int *inOrderString, in
     root = buildTree(preOrderString, inOrderString, 0, nodes - 1);
     return tree;
 }
+
+binaryTree *createTree(const int *treeArray, int nodes)
+{
+    if (treeArray[0] == -1)
+        return NULL;
+
+    binaryTree *tree = initBinaryTree();
+
+    Queue *que = initQueue();
+    TreeNode *newNode = initTreeNode(treeArray[0]);
+    enqueue(que, newNode);
+    root = newNode;
+
+    int i = 0;
+    while (i < nodes)
+    {
+        TreeNode *temp = dequeue(que);
+        if (treeArray[2 * i + 1] != -1 && (i * 2 + 1) < nodes)
+        {
+            newNode = initTreeNode(treeArray[2 * i + 1]);
+            temp->leftChild = newNode;
+            enqueue(que, newNode);
+        }
+        if (treeArray[2 * i + 2] != -1 && (i * 2 + 2) < nodes)
+        {
+            newNode = initTreeNode(treeArray[2 * i + 2]);
+            temp->rightChild = newNode;
+            enqueue(que, newNode);
+        }
+        i++;
+    }
+    return tree;
+}
