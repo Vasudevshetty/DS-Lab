@@ -82,3 +82,5 @@ void postOrder(node *root)
         printf("%d ", root->data);
     }
 }
+
+// this is a very basic one it doesn't contain insert and delete function
