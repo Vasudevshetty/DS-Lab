@@ -8,98 +8,100 @@ Note: Illustrate the use of pointer to a structure variable and passing and retu
 fromt the function(both by value and reference.)*/
 
 #include <stdio.h>
+#include <stdlib.h>
 
-struct Time
+typedef struct Time
 {
     int seconds;
     int minutes;
     int hours;
-};
+} Time;
+
+Time *initTime(int hours, int minutes, int seconds)
+{
+    Time *time = (Time *)malloc(sizeof(Time));
+    if (!time)
+    {
+        printf("Memory alloation failed.\n");
+        exit(1);
+    }
+    time->hours = hours;
+    time->minutes = minutes;
+    time->seconds = seconds;
+    return time;
+}
 
 // function to read time
-void readTime(struct Time *t)
+Time *readTime()
 {
+    int hours, minutes, seconds;
     // handeled case where the time format goes invalid.
-    int isTimeValid = 0;
-    do
-    {
-        printf("Enter time (HH MM SS): ");
-        scanf("%d %d %d", &t->hours, &t->minutes, &t->seconds);
-        printf("\n");
+    printf("Enter time (HH MM SS): ");
+    scanf("%d %d %d", &hours, &minutes, &seconds);
 
-        if ((t->hours >= 0 && t->hours <= 23) && (t->minutes >= 0 && t->minutes <= 59) && (t->seconds >= 0 && t->seconds <= 59))
-            isTimeValid = 1;
-        else
-            printf("Invalid Time format! Please enter a valid time.\n");
-    } while (!isTimeValid);
+    return initTime(hours, minutes, seconds);
 }
 
 // function to display time
-void displayTime(const struct Time *t)
+void displayTime(const Time *t)
 {
     printf("Time is %02d : %02d : %02d", t->hours, t->minutes, t->seconds);
     printf("\n\n");
 }
 
-/* Arrow opertor(->) is used to access the structures members usings its pointer as demonstrated above.*/
+/* Arrow opertor(->) is used to access the ures members usings its pointer as demonstrated above.*/
 
 // function to update time
-struct Time updateTime(struct Time t)
+void updateTime(Time *t)
 {
     // this function is demonstrated using call by value.
 
-    t.seconds++;
-    if (t.seconds == 60)
+    t->seconds++;
+    if (t->seconds == 60)
     {
-        t.seconds = 0;
-        t.minutes++;
-        if (t.minutes == 60)
+        t->seconds = 0;
+        t->minutes++;
+        if (t->minutes == 60)
         {
-            t.minutes = 0;
-            t.hours++;
+            t->minutes = 0;
+            t->hours++;
         }
-        if (t.hours == 24)
+        if (t->hours == 24)
         {
-            t.hours = 0;
+            t->hours = 0;
         }
     }
-    return t;
 }
 
 // this function adds two times correspondigly checks the format of 24 and matches it.
-struct Time addTime(struct Time *T1, struct Time *T2)
+Time *addTime(Time *T1, Time *T2)
 {
     // this function demonstrates call by reference.
+    int hours, minutes, seconds;
 
-    struct Time result;
-    result.seconds = T1->seconds + T2->seconds;
-    result.minutes = T1->minutes + T2->minutes;
-    result.hours = T1->hours + T2->hours;
+    seconds = T1->seconds + T2->seconds;
+    minutes = T1->minutes + T2->minutes;
+    hours = T1->hours + T2->hours;
 
-    if (result.seconds >= 60)
+    if (seconds >= 60)
     {
-        result.seconds -= 60;
-        result.minutes++;
+        seconds -= 60;
+        minutes++;
     }
-    if (result.minutes >= 60)
+    if (minutes >= 60)
     {
-        result.minutes -= 60;
-        result.hours++;
+        minutes -= 60;
+        hours++;
     }
-    if (result.hours >= 24)
-        result.hours -= 24;
+    if (hours >= 24)
+        hours -= 24;
 
-    return result;
+    return initTime(hours, minutes, seconds);
 }
 
 int main()
 {
-    struct Time currentTime = {};
-    struct Time updatedTime = {};
-    struct Time addedTime = {};
-    // Initalised to 0 upon not reading.
-    struct Time T1, T2;
-
+    Time *time;
     int choice;
     do
     {
@@ -115,25 +117,17 @@ int main()
         switch (choice)
         {
         case 1:
-            readTime(&currentTime);
+            time = readTime();
             break;
         case 2:
-            displayTime(&currentTime);
+            displayTime(time);
             break;
         case 3:
-            updatedTime = updateTime(currentTime);
-            currentTime = updatedTime;
-            printf("Updated time is,\n");
-            displayTime(&updatedTime);
+            updateTime(time);
+            displayTime(time);
             break;
         case 4:
-            printf("Enter first Time to add,\n");
-            readTime(&T1);
-            printf("Enter second Time to add,\n");
-            readTime(&T2);
-            addedTime = addTime(&T1, &T2);
-            printf("The added time is\n");
-            displayTime(&addedTime);
+            displayTime(addTime(readTime(), readTime()));
             break;
         case 5:
             printf("Exiting....\n");
