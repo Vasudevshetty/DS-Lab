@@ -20,7 +20,8 @@ Graph *createGraph(int vertex)
     graph->vertex = vertex;
     graph->adjList = (int **)malloc(sizeof(int *) * graph->vertex);
 
-    if(!graph->adjList){
+    if (!graph->adjList)
+    {
         free(graph);
         printf("Memroy allocation failed.\n");
         exit(1);
@@ -32,3 +33,34 @@ Graph *createGraph(int vertex)
     return graph;
 }
 
+#define list graph->adjList
+
+void addEdge(Graph *graph, int src, int dest)
+{
+    if (list[src] == NULL)
+    {
+        list[src] = (int *)malloc(sizeof(int) * 2);
+        list[src][0] = dest;
+        list[src][1] = -1;
+    }
+    else
+    {
+        int size = 0;
+        while (list[src][size] != -1)
+            size++;
+
+        int *newList = (int *)malloc(sizeof(int) * (size + 2));
+        if(!newList){
+            printf("Memroy allocation failed.\n");
+            exit(1);
+        }
+        for (int i = 0; i < size; i++)
+            newList[i] = list[src][i];
+
+        newList[size] = dest;
+        newList[size + 1] = -1;
+
+        free(list[src]);
+        list[src] = newList;
+    }
+}
