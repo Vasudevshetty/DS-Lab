@@ -50,7 +50,8 @@ void addEdge(Graph *graph, int src, int dest)
             size++;
 
         int *newList = (int *)malloc(sizeof(int) * (size + 2));
-        if(!newList){
+        if (!newList)
+        {
             printf("Memroy allocation failed.\n");
             exit(1);
         }
@@ -64,3 +65,28 @@ void addEdge(Graph *graph, int src, int dest)
         list[src] = newList;
     }
 }
+
+void printGraph(const Graph *graph)
+{
+    for (int i = 0; i < graph->vertex; i++)
+    {
+        printf("Vertex %d : ", i);
+        for (int j = 0; j < graph->vertex; j++)
+        {
+            if (list[i][j] == -1)
+                break;
+            printf("%d ", list[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void freeGraph(Graph *graph)
+{
+    for (int i = 0; i < graph->vertex; i++)
+        free(list[i]);
+    free(list);
+    free(graph);
+}
+
