@@ -57,8 +57,8 @@ void insertByPosition(Array *array, int data, int position)
         return;
     }
 
-    for (int i = position; i < array->length; i++)
-        array->items[i + 1] = array->items[i];
+    for(int i = array->length; i > position; i--)
+        array->items[i] = array->items[i - 1];
 
     array->items[position] = data;
     array->length++;
