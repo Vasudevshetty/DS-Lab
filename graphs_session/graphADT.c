@@ -39,7 +39,7 @@ void addEdge(Graph *graph, int src, int dest)
 {
     if (list[src] == NULL)
     {
-        list[src] = (int *)malloc(sizeof(int) * 2);
+        list[src] = (int *)malloc(sizeof(int));
         list[src][0] = dest;
         list[src][1] = -1;
     }
@@ -71,12 +71,9 @@ void printGraph(const Graph *graph)
     for (int i = 0; i < graph->vertex; i++)
     {
         printf("Vertex %d : ", i);
-        for (int j = 0; j < graph->vertex; j++)
-        {
-            if (list[i][j] == -1)
-                break;
-            printf("%d ", list[i][j]);
-        }
+        int j = 0;
+        while (list[i][j] != -1)
+            printf("%d ", list[i][j++]);
         printf("\n");
     }
     printf("\n");
@@ -90,3 +87,18 @@ void freeGraph(Graph *graph)
     free(graph);
 }
 
+int main()
+{
+    int vertex = 4;
+    Graph *graph = createGraph(vertex);
+
+    addEdge(graph, 0, 1);
+    addEdge(graph, 0, 2);
+    addEdge(graph, 0, 3);
+    addEdge(graph, 1, 3);
+    addEdge(graph, 2, 3);
+    addEdge(graph, 4, 2);
+
+    printGraph(graph);
+    return 0;
+}
