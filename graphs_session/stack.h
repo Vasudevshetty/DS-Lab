@@ -1,22 +1,26 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 #define MAX 100
 
-typedef struct Stack{
+typedef struct Stack
+{
     int *items;
     int top;
 } Stack;
 
-Stack* initStack(){
+Stack *initStack()
+{
     Stack *stack = (Stack *)malloc(sizeof(Stack));
-    if(!stack){
+    if (!stack)
+    {
         printf("Memory allcoation failed.\n");
         exit(1);
     }
     stack->items = (int *)malloc(sizeof(int) * MAX);
-    if(!stack->items){
+    if (!stack->items)
+    {
         printf("Memory allcoation failed.\n");
         free(stack);
         exit(1);
@@ -25,24 +29,30 @@ Stack* initStack(){
     return stack;
 }
 
-bool isEmpty(const Stack* stack){
+bool isEmpty(const Stack *stack)
+{
     return stack->top == -1;
 }
 
-bool isFull(const Stack* stack){
+bool isFull(const Stack *stack)
+{
     return stack->top == MAX - 1;
 }
 
-void push(Stack* stack, int data){
-    if(isFull(stack)){
+void push(Stack *stack, int data)
+{
+    if (isFull(stack))
+    {
         printf("Stack full, cannot push.\n");
         return;
     }
     stack->items[++(stack->top)] = data;
 }
 
-int pop(Stack* stack){
-    if(isEmpty(stack)){
+int pop(Stack *stack)
+{
+    if (isEmpty(stack))
+    {
         printf("Emtpy stack, cannot pop.\n");
         return -1;
     }
@@ -52,19 +62,21 @@ int pop(Stack* stack){
     return data;
 }
 
-int peek(const Stack* stack){
+int peek(const Stack *stack)
+{
     return isEmpty(stack) ? -1 : stack->items[stack->top];
 }
 
-void display(const Stack* stack){
-    if(isEmpty(stack)){
+void display(const Stack *stack)
+{
+    if (isEmpty(stack))
+    {
         printf("Empty stack, cannot display.\n");
         return;
     }
 
     printf("The elements of the stack are,\n");
-    for(int i = stack->top; i >= 0; i--)
+    for (int i = stack->top; i >= 0; i--)
         printf("%d ", stack->items[i]);
     printf("\n");
 }
-
